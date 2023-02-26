@@ -7,6 +7,7 @@ Widget commonTextFormField({required String hintText}){
   return Container(
     padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 50.0),
     child: TextFormField(
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.white70),
