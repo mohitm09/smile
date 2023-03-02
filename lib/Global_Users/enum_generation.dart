@@ -3,3 +3,10 @@ enum EmailSignUpResults{
   EmailAlreadtExist,
   SignUpNotCompleted
 }
+
+enum EmailSignInResults{
+  SignInCompleted,
+  EmailNotVerified,
+  EmailOrPasswordInvalid,
+  UnexpectedError
+}
