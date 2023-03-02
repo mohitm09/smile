@@ -71,12 +71,12 @@ Widget socialMediaIntegrationButtons() {
             'assets/images/google.png',width: 50.0,
           )
         ),
-        SizedBox(width: 80.0,),
-        GestureDetector(
-          onTap: () {
-            print('Facebook Pressed');
-          },child: Image.asset('assets/images/fbook.png',width: 50.0,
-        )),
+        // SizedBox(width: 80.0,),
+        // GestureDetector(
+        //   onTap: () {
+        //     print('Facebook Pressed');
+        //   },child: Image.asset('assets/images/fbook.png',width: 50.0,
+        // )),
       ],
     ),
   );
