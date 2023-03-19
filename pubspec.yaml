@@ -35,6 +35,7 @@ dependencies:
   firebase_auth:
   firebase_core:
 
+  google_sign_in: ^6.0.2
   loading_overlay: ^0.2.1
 
 

@@ -10,3 +10,9 @@ enum EmailSignInResults{
   EmailOrPasswordInvalid,
   UnexpectedError
 }
+enum GoogleSignInResults{
+  SignInCompleted,
+  SignInNotCompleted,
+  UnexpectedError,
+  AlreadySignedIn,
+}

@@ -57,30 +57,30 @@ Widget commonTextFormField({required String hintText, required String? Function(
 //   );
 // }
 
-Widget socialMediaIntegrationButtons() {
-  return Container(
-    width: double.maxFinite,
-    padding: EdgeInsets.all(30.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            print('Google Pressed');
-          }, child: Image.asset(
-            'assets/images/google.png',width: 50.0,
-          )
-        ),
-        // SizedBox(width: 80.0,),
-        // GestureDetector(
-        //   onTap: () {
-        //     print('Facebook Pressed');
-        //   },child: Image.asset('assets/images/fbook.png',width: 50.0,
-        // )),
-      ],
-    ),
-  );
-}
+// Widget socialMediaIntegrationButtons() {
+//   return Container(
+//     width: double.maxFinite,
+//     padding: EdgeInsets.all(30.0),
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         GestureDetector(
+//           onTap: () {
+//             print('Google Pressed');
+//           }, child: Image.asset(
+//             'assets/images/google.png',width: 50.0,
+//           )
+//         ),
+//         // SizedBox(width: 80.0,),
+//         // GestureDetector(
+//         //   onTap: () {
+//         //     print('Facebook Pressed');
+//         //   },child: Image.asset('assets/images/fbook.png',width: 50.0,
+//         // )),
+//       ],
+//     ),
+//   );
+// }
 
 Widget switchAnotherAuthString(BuildContext context, String buttonNamefirst, String buttonNameLast) {
   return ElevatedButton(

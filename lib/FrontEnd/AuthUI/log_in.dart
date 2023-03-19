@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/BackEnd/Firebase/Auth/sign_up_auth.dart';
+import 'package:smile/BackEnd/Firebase/Auth/email_and_pwd_auth.dart';
 import 'package:smile/FrontEnd/home_page.dart';
 import 'package:smile/Global_Users/enum_generation.dart';
 
+import '../../BackEnd/Firebase/Auth/google_auth.dart';
 import '../../Global_Users/reg_exp.dart';
 import 'common_auth_methods.dart';
 
@@ -23,6 +24,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _password = TextEditingController();
 
   final EmailAndPasswordAuth _emailAndPasswordAuth = EmailAndPasswordAuth();
+  final GoogleAuthentication _googleAuthentication = GoogleAuthentication();
 
   bool _isLoading = false;
 
@@ -33,6 +35,7 @@ class _LogInScreenState extends State<LogInScreen> {
           backgroundColor: const Color.fromRGBO(34, 48, 68, 1),
           body: LoadingOverlay(
             isLoading: this._isLoading,
+            color:Colors.black,
             child: Container(
               child: ListView(
                 shrinkWrap: true,
@@ -71,7 +74,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       style: TextStyle(color: Colors.white,fontSize: 20.0),
                     ),
                   ),
-                  socialMediaIntegrationButtons(),
+                  logInSocialMediaIntegrationButtons(),
                   switchAnotherAuthString(context, "Don't have an account? ", 'Sign-Up')
                 ],
               ),
@@ -122,7 +125,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
             String msg = '';
             if(emailSignInResults == EmailSignInResults.SignInCompleted){
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()), (routr) => false);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()), (route) => false);
             }
             else if(emailSignInResults == EmailSignInResults.EmailNotVerified){
               msg = 'Email not verified. \nPlease verify your email and then LogIn';
@@ -150,4 +153,65 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+  Widget logInSocialMediaIntegrationButtons() {
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.all(30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+              onTap: () async {
+                print('Google Pressed');
+                if (mounted){
+                  setState(() {
+                    this._isLoading = true;
+                  });
+                }
+
+                final GoogleSignInResults _googleSignInResults = await this._googleAuthentication.signInWithGoogle();
+
+                String msg ='';
+
+                if (_googleSignInResults == GoogleSignInResults.SignInCompleted) {
+                  msg = 'Sign In Completed';
+
+                }else if(_googleSignInResults==GoogleSignInResults.SignInNotCompleted)
+                  msg='Sign In Not Completed';
+                else if(_googleSignInResults==GoogleSignInResults.AlreadySignedIn)
+                  msg='Already SignedIn';
+                else
+                  msg ='Unexpected Error Message';
+
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+
+                if (_googleSignInResults == GoogleSignInResults.SignInCompleted)
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => HomePage()),
+                          (route) => false);
+
+
+                if (mounted){
+                  setState(() {
+                    this._isLoading = false;
+                  });
+                }
+
+              }, child: Image.asset(
+            'assets/images/google.png',width: 50.0,
+          )
+          ),
+          // SizedBox(width: 80.0,),
+          // GestureDetector(
+          //   onTap: () {
+          //     print('Facebook Pressed');
+          //   },child: Image.asset('assets/images/fbook.png',width: 50.0,
+          // )),
+        ],
+      ),
+    );
+  }
+
 }
