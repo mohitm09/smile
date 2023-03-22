@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:smile/BackEnd/Firebase/Auth/email_and_pwd_auth.dart';
+import 'package:smile/FrontEnd/NewUserEntry/new_user_entry.dart';
 import 'package:smile/FrontEnd/home_page.dart';
 import 'package:smile/Global_Users/enum_generation.dart';
 
@@ -125,7 +126,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
             String msg = '';
             if(emailSignInResults == EmailSignInResults.SignInCompleted){
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()), (route) => false);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => TakePrimaryUserData()), (route) => false);
             }
             else if(emailSignInResults == EmailSignInResults.EmailNotVerified){
               msg = 'Email not verified. \nPlease verify your email and then LogIn';
@@ -189,7 +190,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 if (_googleSignInResults == GoogleSignInResults.SignInCompleted)
                   Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => HomePage()),
+                      MaterialPageRoute(builder: (_) => TakePrimaryUserData()),
                           (route) => false);
 
 
