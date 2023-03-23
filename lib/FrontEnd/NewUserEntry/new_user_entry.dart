@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/new_user_entry.dart';
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:smile/FrontEnd/home_page.dart';
+
 
 
 class TakePrimaryUserData extends StatefulWidget {
@@ -19,6 +25,8 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
     final TextEditingController _userName = TextEditingController();
     final TextEditingController _userAbout = TextEditingController();
 
+    final CloudStoreDataManagement _cloudStoreDataManagement = CloudStoreDataManagement();
+
     @override
     Widget build (BuildContext context) {
       return SafeArea(
@@ -34,11 +42,22 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                 child: ListView(
                   shrinkWrap: true,
                   children: [
-                    commonTextFormField(hintText:'User Name', validator: (inputVal){
-                      if (inputVal!.length<6)
-                        return 'User Name must have 6 characters';
-                      return null;
+                    commonTextFormField(
+                      bottomPadding: 30.0,
+                        hintText:'User Name',
+                        validator: (inputUserName){
+                        final RegExp _messageRegex = RegExp(r'[a-zA-Z0-9]');
 
+                          if (inputUserName!.length <6)
+                            return "User Name At Least 6 Characters";
+                          else if (inputUserName.contains(' ') ||
+                              inputUserName.contains('@'))
+                            return "Space and @ Not Allowed...User '_' instead of space";
+                          else if (inputUserName.contains('__'))
+                            return "'__' Not Allowed...User '_' Instead of '__'";
+                          else if (!_messageRegex.hasMatch(inputUserName))
+                            return "Sorry, Only Emoji Not Supported";
+                          return null;
                     }, textEditingController: this._userName),
 
                     commonTextFormField(hintText:'User About',
@@ -62,7 +81,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
     }
     
     Widget _upperHeading(){
-      return Padding(padding: EdgeInsets.only(top: 30.0),
+      return Padding(padding: EdgeInsets.only(top: 30.0, bottom:50.0),
         child :Center(
           child:Text ('Set Up Your Account',style:TextStyle(color:Colors.white,fontSize: 25.0),
           ),
@@ -101,6 +120,41 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
 
             if(this._takeUserPrimaryInformationKey.currentState!.validate()){
               print('Validated');
+
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+              if (mounted){
+                setState(() {
+                  this._isLoading=true;
+                });
+              }
+
+              final bool canRegisterNewUser = await _cloudStoreDataManagement.checkThisUserAlreadyPresentOrNot(userName: this._userName.text);
+
+              String msg ='';
+
+              if(!canRegisterNewUser)
+                msg = 'User Name Already present';
+              else{
+                final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString());
+                if (_userEntryResponse) {
+                  msg = 'User data Entry Successfully';
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()),(route) => false);
+                }else
+                  msg = 'User data Not Entry Successfully';
+              }
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+              if (mounted){
+                setState(() {
+                  this._isLoading=false;
+                });
+              }
+
+
+
+
             }else{
               print('Not Validated');
             }
