@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
   @override
+  // ignore: library_private_types_in_public_api
   _MainScreenState createState() => _MainScreenState();
 }
 
@@ -14,56 +15,66 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-          backgroundColor: const Color.fromRGBO(34, 48, 60, 1),
-          appBar: AppBar(
-            brightness: Brightness.dark,
-            backgroundColor: const Color.fromRGBO(25, 39, 52, 1),
-            elevation: 10.0,
-            shadowColor: Colors.white70,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0),
-              ),
-              side: BorderSide(width: 0.7),
-            ),
-            title: Text(
-              "Generation",
-              style: TextStyle(
-                  fontSize: 25.0, fontFamily: 'Lora', letterSpacing: 1.0),
-            ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: 10.0),
-                child: Icon(
-                  Icons.search_outlined,
-                  size: 25.0,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (_currIndex > 0)
+            return false;
+          else {
+            print('Tata');
+            return true;
+          }
+        },
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(34, 48, 60, 1),
+            appBar: AppBar(
+              brightness: Brightness.dark,
+              backgroundColor: const Color.fromRGBO(25, 39, 52, 1),
+              elevation: 10.0,
+              shadowColor: Colors.white70,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0),
                 ),
+                side: BorderSide(width: 0.7),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  right: 20.0,
-                ),
-                child: IconButton(
-                  tooltip: 'Refresh',
-                  icon: Icon(
-                    Icons.refresh_outlined,
+              title: Text(
+                "Generation",
+                style: TextStyle(
+                    fontSize: 25.0, fontFamily: 'Lora', letterSpacing: 1.0),
+              ),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: Icon(
+                    Icons.search_outlined,
                     size: 25.0,
                   ),
-                  onPressed: () async {},
                 ),
-              ),
-            ],
-            bottom: _bottom(),
-          ),
-          body: TabBarView(
-            children: [
-              Center(),
-              Center(),
-              Center(),
-            ],
-          )),
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: 20.0,
+                  ),
+                  child: IconButton(
+                    tooltip: 'Refresh',
+                    icon: Icon(
+                      Icons.refresh_outlined,
+                      size: 25.0,
+                    ),
+                    onPressed: () async {},
+                  ),
+                ),
+              ],
+              bottom: _bottom(),
+            ),
+            body: TabBarView(
+              children: [
+                Center(),
+                Center(),
+                Center(),
+              ],
+            )),
+      ),
     );
   }
 
