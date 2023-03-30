@@ -6,160 +6,150 @@ import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/new_user_entry.d
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/FrontEnd/home_page.dart';
-
-
+import 'package:smile/FrontEnd/MainScreen/home_page.dart';
 
 class TakePrimaryUserData extends StatefulWidget {
-  const TakePrimaryUserData({Key? key}): super(key: key);
+  const TakePrimaryUserData({Key? key}) : super(key: key);
 
   @override
   _TakePrimaryUserDataState createState() => _TakePrimaryUserDataState();
 }
 
 class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
+  bool _isLoading = false;
 
-    bool _isLoading = false;
+  final GlobalKey<FormState> _takeUserPrimaryInformationKey =
+      GlobalKey<FormState>();
+  final TextEditingController _userName = TextEditingController();
+  final TextEditingController _userAbout = TextEditingController();
 
-    final GlobalKey<FormState> _takeUserPrimaryInformationKey = GlobalKey<FormState>();
-    final TextEditingController _userName = TextEditingController();
-    final TextEditingController _userAbout = TextEditingController();
+  final CloudStoreDataManagement _cloudStoreDataManagement =
+      CloudStoreDataManagement();
 
-    final CloudStoreDataManagement _cloudStoreDataManagement = CloudStoreDataManagement();
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: const Color.fromRGBO(34, 48, 68, 1),
+      body: LoadingOverlay(
+          isLoading: this._isLoading,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Form(
+              key: this._takeUserPrimaryInformationKey,
+              child: ListView(shrinkWrap: true, children: [
+                commonTextFormField(
+                    bottomPadding: 30.0,
+                    hintText: 'User Name',
+                    validator: (inputUserName) {
+                      final RegExp _messageRegex = RegExp(r'[a-zA-Z0-9]');
 
-    @override
-    Widget build (BuildContext context) {
-      return SafeArea(
-          child: Scaffold(
-            backgroundColor: const Color.fromRGBO(34, 48, 68, 1),
-        body: LoadingOverlay(
-          isLoading:this._isLoading ,
-            child:Container(
-              width : MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Form(
-                key: this._takeUserPrimaryInformationKey,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    commonTextFormField(
-                      bottomPadding: 30.0,
-                        hintText:'User Name',
-                        validator: (inputUserName){
-                        final RegExp _messageRegex = RegExp(r'[a-zA-Z0-9]');
-
-                          if (inputUserName!.length <6)
-                            return "User Name At Least 6 Characters";
-                          else if (inputUserName.contains(' ') ||
-                              inputUserName.contains('@'))
-                            return "Space and @ Not Allowed...User '_' instead of space";
-                          else if (inputUserName.contains('__'))
-                            return "'__' Not Allowed...User '_' Instead of '__'";
-                          else if (!_messageRegex.hasMatch(inputUserName))
-                            return "Sorry, Only Emoji Not Supported";
-                          return null;
-                    }, textEditingController: this._userName),
-
-                    commonTextFormField(hintText:'User About',
-                        validator: (inputVal){
-                      if (inputVal!.length<6)
+                      if (inputUserName!.length < 6)
+                        return "User Name At Least 6 Characters";
+                      else if (inputUserName.contains(' ') ||
+                          inputUserName.contains('@'))
+                        return "Space and @ Not Allowed...User '_' instead of space";
+                      else if (inputUserName.contains('__'))
+                        return "'__' Not Allowed...User '_' Instead of '__'";
+                      else if (!_messageRegex.hasMatch(inputUserName))
+                        return "Sorry, Only Emoji Not Supported";
+                      return null;
+                    },
+                    textEditingController: this._userName),
+                commonTextFormField(
+                    hintText: 'User About',
+                    validator: (inputVal) {
+                      if (inputVal!.length < 6)
                         return 'User About must have 6 characters';
                       return null;
-
-                    }, textEditingController: this._userAbout),
-
-                    _saveUserPrimaryInformation(),
-
-
-
-                  ]
-                ),
-              ),
-            )
-          ),
-      ));
-    }
-    
-    Widget _upperHeading(){
-      return Padding(padding: EdgeInsets.only(top: 30.0, bottom:50.0),
-        child :Center(
-          child:Text ('Set Up Your Account',style:TextStyle(color:Colors.white,fontSize: 25.0),
-          ),
-        )
-      );
-    }
-
-    Widget _saveUserPrimaryInformation() {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              minimumSize: Size(
-                  MediaQuery.of(context).size.width -60, 30.0),
-              elevation: 5.0,
-              primary: Color.fromRGBO(57, 60, 80, 1),
-              padding: EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                  top: 7.0,
-                  bottom: 7.0
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))
-              )
-          ),
-          child: Text(
-            'Save',
-            style: TextStyle(
-                fontSize: 25.0,
-                letterSpacing: 1.0,
-                fontWeight: FontWeight.w400
+                    },
+                    textEditingController: this._userAbout),
+                _saveUserPrimaryInformation(),
+              ]),
             ),
+          )),
+    ));
+  }
+
+  Widget _upperHeading() {
+    return Padding(
+        padding: EdgeInsets.only(top: 30.0, bottom: 50.0),
+        child: Center(
+          child: Text(
+            'Set Up Your Account',
+            style: TextStyle(color: Colors.white, fontSize: 25.0),
           ),
-          onPressed: () async {
+        ));
+  }
 
-            if(this._takeUserPrimaryInformationKey.currentState!.validate()){
-              print('Validated');
-
-              SystemChannels.textInput.invokeMethod('TextInput.hide');
-
-              if (mounted){
-                setState(() {
-                  this._isLoading=true;
-                });
-              }
-
-              final bool canRegisterNewUser = await _cloudStoreDataManagement.checkThisUserAlreadyPresentOrNot(userName: this._userName.text);
-
-              String msg ='';
-
-              if(!canRegisterNewUser)
-                msg = 'User Name Already present';
-              else{
-                final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString());
-                if (_userEntryResponse) {
-                  msg = 'User data Entry Successfully';
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()),(route) => false);
-                }else
-                  msg = 'User data Not Entry Successfully';
-              }
-
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-
-              if (mounted){
-                setState(() {
-                  this._isLoading=false;
-                });
-              }
-
-
-
-
-            }else{
-              print('Not Validated');
-            }
-          },
+  Widget _saveUserPrimaryInformation() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            minimumSize: Size(MediaQuery.of(context).size.width - 60, 30.0),
+            elevation: 5.0,
+            primary: Color.fromRGBO(57, 60, 80, 1),
+            padding:
+                EdgeInsets.only(left: 20.0, right: 20.0, top: 7.0, bottom: 7.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)))),
+        child: Text(
+          'Save',
+          style: TextStyle(
+              fontSize: 25.0, letterSpacing: 1.0, fontWeight: FontWeight.w400),
         ),
-      );
-    }
+        onPressed: () async {
+          if (this._takeUserPrimaryInformationKey.currentState!.validate()) {
+            print('Validated');
+
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+            if (mounted) {
+              setState(() {
+                this._isLoading = true;
+              });
+            }
+
+            final bool canRegisterNewUser = await _cloudStoreDataManagement
+                .checkThisUserAlreadyPresentOrNot(
+                    userName: this._userName.text);
+
+            String msg = '';
+
+            if (!canRegisterNewUser)
+              msg = 'User Name Already present';
+            else {
+              final bool _userEntryResponse =
+                  await _cloudStoreDataManagement.registerNewUser(
+                      userName: this._userName.text,
+                      userAbout: this._userAbout.text,
+                      userEmail:
+                          FirebaseAuth.instance.currentUser!.email.toString());
+              if (_userEntryResponse) {
+                msg = 'User data Entry Successfully';
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => HomePage()),
+                    (route) => false);
+              } else
+                msg = 'User data Not Entry Successfully';
+            }
+
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg)));
+
+            if (mounted) {
+              setState(() {
+                this._isLoading = false;
+              });
+            }
+          } else {
+            print('Not Validated');
+          }
+        },
+      ),
+    );
+  }
 }
