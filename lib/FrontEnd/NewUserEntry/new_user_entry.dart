@@ -6,7 +6,8 @@ import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/new_user_entry.d
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/FrontEnd/home_page.dart';
+import 'package:smile/FrontEnd/MainScreens/home_page.dart';
+import 'package:smile/FrontEnd/MainScreens/main_screen.dart';
 
 
 
@@ -63,7 +64,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                     commonTextFormField(hintText:'User About',
                         validator: (inputVal){
                       if (inputVal!.length<6)
-                        return 'User About must have 6 characters';
+                        return '9User About must have 6 characters';
                       return null;
 
                     }, textEditingController: this._userAbout),
@@ -139,7 +140,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                 final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString());
                 if (_userEntryResponse) {
                   msg = 'User data Entry Successfully';
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage()),(route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => MainScreen()),(route) => false);
                 }else
                   msg = 'User data Not Entry Successfully';
               }

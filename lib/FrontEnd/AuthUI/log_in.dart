@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:smile/BackEnd/Firebase/Auth/email_and_pwd_auth.dart';
 import 'package:smile/FrontEnd/NewUserEntry/new_user_entry.dart';
-import 'package:smile/FrontEnd/home_page.dart';
+import 'package:smile/FrontEnd/MainScreens/home_page.dart';
 import 'package:smile/Global_Users/enum_generation.dart';
 
 import '../../BackEnd/Firebase/Auth/google_auth.dart';
