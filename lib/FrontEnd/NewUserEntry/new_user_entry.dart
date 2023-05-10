@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/cloud_new_user_entry.dart';
+import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/cloud_data_management.dart';
 import 'package:smile/BackEnd/sqlite_management/local_databse_management.dart';
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
