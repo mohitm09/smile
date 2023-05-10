@@ -1,10 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smile/BackEnd/sqlite_management/local_databse_management.dart';
 
 class CloudStoreDataManagement{
 
   final _collectionName = 'smile_users';
+
 
   Future<bool> checkThisUserAlreadyPresentOrNot(
       { required String userName}) async{
@@ -54,9 +56,7 @@ class CloudStoreDataManagement{
         "user_name":userName,
         });
 
-        return true;
-
-
+      return true;
 
     }catch(e){
       print('Error in Register ne user :${e.toString()}');
@@ -72,4 +72,28 @@ class CloudStoreDataManagement{
       return false;
     }
   }
+
+  Future<Map<String , dynamic>> getTokenFromCloudStore ({required String userMail}) async{
+    try{
+
+      final DocumentSnapshot<Map<String , dynamic>> documentSnapshot = await FirebaseFirestore.instance.doc('${this._collectionName}/$userMail').get();
+
+      print('DocumentSnapShot is  : ${documentSnapshot.data()} ');
+
+      final Map<String,dynamic> importantData = Map<String,dynamic>();
+
+      importantData["token"] = documentSnapshot.data()!["Token"];
+      importantData["date"] = documentSnapshot.data()!["creation_date"];
+      importantData["time"] = documentSnapshot.data()!["creation_time"];
+
+      return importantData;
+
+    }catch(e){
+      print('Error in get Token Fom Cloud Store : ${e.toString()}');
+      return {};
+    }
+  }
+
+
+
   }

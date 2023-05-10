@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/new_user_entry.dart';
+import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/cloud_new_user_entry.dart';
+import 'package:smile/BackEnd/sqlite_management/local_databse_management.dart';
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:smile/FrontEnd/MainScreens/home_page.dart';
 import 'package:smile/FrontEnd/MainScreens/main_screen.dart';
 
 
@@ -27,6 +27,8 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
     final TextEditingController _userAbout = TextEditingController();
 
     final CloudStoreDataManagement _cloudStoreDataManagement = CloudStoreDataManagement();
+
+    final LocalDatabase _localDatabase = LocalDatabase();
 
     @override
     Widget build (BuildContext context) {
@@ -140,6 +142,26 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                 final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString());
                 if (_userEntryResponse) {
                   msg = 'User data Entry Successfully';
+
+                  /// calling local databases mehtods of initialization local database with required methods
+
+                  await this._localDatabase.createTableToStoreImportantData();
+
+                  final Map<String,dynamic>  _importantFetchedData = await _cloudStoreDataManagement.getTokenFromCloudStore(userMail: FirebaseAuth.instance.currentUser!.email.toString());
+
+                  await this._localDatabase.insertOrUpdateDataForThisAccount(
+
+                      userName: this._userName.text,
+                      userMail: FirebaseAuth.instance.currentUser!.email.toString(),
+                      userToken: _importantFetchedData["token"],
+                      userAbout: this._userAbout.text,
+                      userAccCreationDate: _importantFetchedData["date"],
+                      userAccCreationTime: _importantFetchedData["time"]);
+
+                  await _localDatabase
+                      .createTableForUserActivity(tableName: this._userName.text);
+
+
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => MainScreen()),(route) => false);
                 }else
                   msg = 'User data Not Entry Successfully';
@@ -152,8 +174,6 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                   this._isLoading=false;
                 });
               }
-
-
 
 
             }else{

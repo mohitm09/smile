@@ -16,3 +16,8 @@ enum GoogleSignInResults{
   UnexpectedError,
   AlreadySignedIn,
 }
+
+enum StatusMediaTypes{
+  TextActivity,
+  ImageActivity,
+}
