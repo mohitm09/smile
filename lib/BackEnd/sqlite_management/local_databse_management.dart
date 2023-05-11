@@ -30,9 +30,9 @@ class LocalDatabase {
   final String _colActivityExtraText = "Activity_Extra_Text";
   final String _colActivityBGInformation = "Activity_BG_Information";
 
-
   /// Create Singleton Objects(Only Created once in the whole application)
-  static late LocalDatabase _localStorageHelper = LocalDatabase._createInstance();
+  static late LocalDatabase _localStorageHelper =
+      LocalDatabase._createInstance();
   static late Database _database;
 
   /// Instantiate the obj
@@ -56,7 +56,7 @@ class LocalDatabase {
     final String desirePath = await getDatabasesPath();
 
     final Directory newDirectory =
-    await Directory(desirePath + '/.Databases/').create();
+        await Directory(desirePath + '/.Databases/').create();
     final String path = newDirectory.path + '/generation_local_storage.db';
 
     // create the database
@@ -65,16 +65,17 @@ class LocalDatabase {
   }
 
   /// Table for store important data Table
-  Future<void> createTableToStoreImportantData() async {
+  Future<bool> createTableToStoreImportantData() async {
     try {
       final Database db = await this.database;
       await db.execute(
           "CREATE TABLE ${this._importantTableData}($_colUserName TEXT PRIMARY KEY, $_colUserMail TEXT, $_colToken TEXT, $_colProfileImagePath TEXT, $_colProfileImageUrl TEXT, $_colAbout TEXT, $_colWallpaper TEXT, $_colNotification TEXT, $_colMobileNumber TEXT, $_colAccCreationDate TEXT, $_colAccCreationTime TEXT)");
 
       print('User Important table creatred');
-
+      return true;
     } catch (e) {
       print('Error in Create Import Table: ${e.toString()}');
+      return false;
     }
   }
 
@@ -140,11 +141,11 @@ class LocalDatabase {
   /// Insert ActivityData to Activity Table
   Future<bool> insertDataInUserActivityTable(
       {required String tableName,
-        required String statusLinkOrString,
-        required StatusMediaTypes mediaTypes,
-        required String activityTime,
-        String extraText = '',
-        String bgInformation = ''}) async {
+      required String statusLinkOrString,
+      required StatusMediaTypes mediaTypes,
+      required String activityTime,
+      String extraText = '',
+      String bgInformation = ''}) async {
     try {
       final Database db = await this.database;
       final Map<String, dynamic> _activityStoreMap = Map<String, dynamic>();
@@ -157,7 +158,7 @@ class LocalDatabase {
 
       /// Result Insert to DB
       final int result =
-      await db.insert('${tableName}_status', _activityStoreMap);
+          await db.insert('${tableName}_status', _activityStoreMap);
 
       return result > 0 ? true : false;
     } catch (e) {

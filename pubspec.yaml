@@ -62,6 +62,10 @@ dependencies:
       ref: master
   google_maps_flutter: ^2.0.6
   geolocator: ^7.4.0
+  just_audio: ^0.9.7
+  percent_indicator: ^3.0.1
+  record: ^3.0.0
+  path_provider:
 
 dev_dependencies:
   flutter_test:

@@ -35,14 +35,14 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
             ),
             errorBuilder: (context, obj, stackTrace) => Center(
                 child: Text(
-                  'Image not Found',
-                  style: TextStyle(
-                    fontSize: 23.0,
-                    color: Colors.red,
-                    fontFamily: 'Lora',
-                    letterSpacing: 1.0,
-                  ),
-                )),
+              'Image not Found',
+              style: TextStyle(
+                fontSize: 23.0,
+                color: Colors.red,
+                fontFamily: 'Lora',
+                letterSpacing: 1.0,
+              ),
+            )),
           ),
         ),
       ),
@@ -51,9 +51,6 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
 
   _getParticularImage() {
     switch (widget.imageProviderCategory) {
-
-
-
       case ImageProviderCategory.FileImage:
         return FileImage(File(widget.imagePath));
 

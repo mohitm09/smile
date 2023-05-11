@@ -15,7 +15,14 @@ class ChatAndActivityScreen extends StatefulWidget {
 class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
   bool _isLoading = false;
   final List<String> _allUserConnectionActivity = ['Generation', 'Samarpan'];
-  final List<String> _allConnectionsUserName = ['Samarpan', 'Generation', 'Paulomi', 'Amitava', 'Youtube', 'Sathi'];
+  final List<String> _allConnectionsUserName = [
+    'Samarpan',
+    'Generation',
+    'Paulomi',
+    'Amitava',
+    'Youtube',
+    'Sathi'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,7 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
           : MediaQuery.of(context).size.height * (3 / 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal, // Make ListView Horizontally
-        itemCount:_allUserConnectionActivity.length,
+        itemCount: _allUserConnectionActivity.length,
         itemBuilder: (context, position) {
           return _activityCollectionList(context, position);
         },
@@ -181,52 +188,53 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
   Widget _connectionList(BuildContext context) {
     return SafeArea(
         child: Container(
-          margin: EdgeInsets.only(
-              top: MediaQuery.of(context).orientation == Orientation.portrait
-                  ? 5.0
-                  : 0.0),
-          padding: const EdgeInsets.only(top: 18.0, bottom: 30.0),
-          height: MediaQuery.of(context).size.height * (5.15 / 8),
-          decoration: BoxDecoration(
-            color: const Color.fromRGBO(31, 51, 71, 1),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10.0,
-                spreadRadius: 0.0,
-                offset: const Offset(0.0, -5.0), // shadow direction: bottom right
-              )
-            ],
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0)),
-            border: Border.all(
-              color: Colors.black26,
-              width: 1.0,
-            ),
-          ),
-          child: ReorderableListView.builder(
-            onReorder: (first, last) {
-              // if (mounted) {
-              //   setState(() {
-              //     final String _draggableConnection =
-              //     this._allConnectionsUserName.removeAt(first);
-              //
-              //     this._allConnectionsUserName.insert(
-              //         last >= this._allConnectionsUserName.length
-              //             ? this._allConnectionsUserName.length
-              //             : last > first
-              //             ? --last
-              //             : last,
-              //         _draggableConnection);
-              //   });
-              // }
-            },
-            itemCount: _allConnectionsUserName.length,
-            itemBuilder: (context, position) {
-              return chatTileContainer(context, position, _allConnectionsUserName[position]);
-            },
-          ),
-        ));
+      margin: EdgeInsets.only(
+          top: MediaQuery.of(context).orientation == Orientation.portrait
+              ? 5.0
+              : 0.0),
+      padding: const EdgeInsets.only(top: 18.0, bottom: 30.0),
+      height: MediaQuery.of(context).size.height * (5.15 / 8),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(31, 51, 71, 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10.0,
+            spreadRadius: 0.0,
+            offset: const Offset(0.0, -5.0), // shadow direction: bottom right
+          )
+        ],
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0)),
+        border: Border.all(
+          color: Colors.black26,
+          width: 1.0,
+        ),
+      ),
+      child: ReorderableListView.builder(
+        onReorder: (first, last) {
+          // if (mounted) {
+          //   setState(() {
+          //     final String _draggableConnection =
+          //     this._allConnectionsUserName.removeAt(first);
+          //
+          //     this._allConnectionsUserName.insert(
+          //         last >= this._allConnectionsUserName.length
+          //             ? this._allConnectionsUserName.length
+          //             : last > first
+          //             ? --last
+          //             : last,
+          //         _draggableConnection);
+          //   });
+          // }
+        },
+        itemCount: _allConnectionsUserName.length,
+        itemBuilder: (context, position) {
+          return chatTileContainer(
+              context, position, _allConnectionsUserName[position]);
+        },
+      ),
+    ));
   }
 
   Widget chatTileContainer(BuildContext context, int index, String _userName) {
@@ -262,31 +270,13 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
                     transitionType: ContainerTransitionType.fadeThrough,
                     openBuilder: (_, __) {
                       return Center();
-
-                      //   ProfileImageManagement
-                      //     .allConnectionsProfilePicLocalPath[
-                      // _userName] !=
-                      //     ''
-                      //     ? PreviewImageScreen(
-                      //     imageFile: File(ProfileImageManagement
-                      //         .allConnectionsProfilePicLocalPath[
-                      //     _userName]))
-                      //     : Center(
-                      //   child: Text(
-                      //     'No Profile Image',
-                      //     style: TextStyle(
-                      //       color: Colors.red,
-                      //       fontSize: 20.0,
-                      //     ),
-                      //   ),
-                      // );
                     },
                     closedBuilder: (_, __) {
                       return CircleAvatar(
                         radius: 30.0,
                         backgroundColor: const Color.fromRGBO(31, 51, 71, 1),
                         backgroundImage:
-                        ExactAssetImage('assets/images/google.png'),
+                            ExactAssetImage('assets/images/google.png'),
                         //getProperImageProviderForConnectionsCollection(
                         //    _userName),
                       );
@@ -301,66 +291,8 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
                   openElevation: 0.0,
                   transitionDuration: Duration(milliseconds: 500),
                   transitionType: ContainerTransitionType.fadeThrough,
-                  // onClosed: (value) async {
-                  //   /// Irrespectively make changes when a chat just Close
-                  //   _localStorageHelper
-                  //       .fetchLatestMessage(_userName)
-                  //       .then((Map<String, String> takeLocalData) {
-                  //     if (takeLocalData != null &&
-                  //         takeLocalData.isNotEmpty &&
-                  //         takeLocalData.values.toString().split('+')[0] != '') {
-                  //       if (_allConnectionsLatestMessage[_userName] != null &&
-                  //           _allConnectionsLatestMessage[_userName].isNotEmpty)
-                  //         _allConnectionsLatestMessage[_userName].clear();
-                  //       else {
-                  //         final List<Map<String, String>> tempList = [];
-                  //         _allConnectionsLatestMessage[_userName] = tempList;
-                  //       }
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           print(
-                  //               'Before Add Data On Closed: ${_allConnectionsLatestMessage[_userName]}');
-                  //
-                  //           _allConnectionsLatestMessage[_userName]
-                  //               .add(takeLocalData);
-                  //         });
-                  //       }
-                  //     }
-                  //   });
-                  //
-                  //   _localStorageHelper
-                  //       .extractProfileImageLocalPath(userName: _userName)
-                  //       .then((String profileImageLocalPath) {
-                  //     print(
-                  //         'All Closed: ${ProfileImageManagement.allConnectionsProfilePicLocalPath[_userName]}');
-                  //
-                  //     if (ProfileImageManagement
-                  //         .allConnectionsProfilePicLocalPath[_userName] !=
-                  //         profileImageLocalPath) {
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           ProfileImageManagement
-                  //               .allConnectionsProfilePicLocalPath[
-                  //           _userName] = profileImageLocalPath;
-                  //         });
-                  //       }
-                  //     }
-                  //   });
-                  //
-                  //   await _chatNotificationStatusCheckAndUpdate(_userName);
-                  // },
                   openBuilder: (context, openWidget) {
                     return ChatScreen(userName: _userName);
-
-                      // ChatScreenSetUp(
-                      //   _userName,
-                      //   ProfileImageManagement
-                      //       .allConnectionsProfilePicLocalPath[
-                      //   _userName] ==
-                      //       null
-                      //       ? ''
-                      //       : ProfileImageManagement
-                      //       .allConnectionsProfilePicLocalPath[_userName]);
                   },
                   closedBuilder: (context, closeWidget) {
                     return Container(
@@ -389,7 +321,10 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
 
                           /// For Extract latest Conversation Message
 //                          _latestDataForConnectionExtractPerfectly(_userName)
-                        Text('Hello Sam', style: TextStyle(color: Colors.white70),),
+                          Text(
+                            'Hello Sam',
+                            style: TextStyle(color: Colors.white70),
+                          ),
                         ],
                       ),
                     );
@@ -404,9 +339,14 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
                     ),
                     child: Column(
                       children: [
-                          Text('12:00'),
-                          SizedBox(height: 10.0,),
-                          Icon(Icons.notifications_active_outlined, color: Colors.green,),
+                        Text('12:00'),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Icon(
+                          Icons.notifications_active_outlined,
+                          color: Colors.green,
+                        ),
                       ],
                     ),
                   ),
@@ -416,6 +356,7 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
           ),
         ));
   }
+
   Widget _externalConnectionManagement() {
     return OpenContainer(
       closedColor: const Color.fromRGBO(20, 200, 50, 1),
@@ -427,14 +368,6 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
         milliseconds: 500,
       ),
       transitionType: ContainerTransitionType.fadeThrough,
-      // onClosed: (val) {
-      //   if (mounted) {
-      //     setState(() {
-      //       this._allConnectionsUserName.toSet().toList();
-      //       this._allUserConnectionActivity.toSet().toList();
-      //     });
-      //   }
-      // },
       openBuilder: (_, __) {
         return SearchScreen();
       },

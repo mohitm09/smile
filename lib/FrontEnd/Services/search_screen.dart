@@ -20,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _isLoading = false;
 
   final CloudStoreDataManagement _cloudStoreDataManagement =
-  CloudStoreDataManagement();
+      CloudStoreDataManagement();
 
   Future<void> _initialDataFetchAndCheckUp() async {
     if (mounted) {
@@ -30,9 +30,9 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     final List<Map<String, dynamic>> takeUsers =
-    await _cloudStoreDataManagement.getAllUsersListExceptMyAccount(
-        currentUserEmail:
-        FirebaseAuth.instance.currentUser!.email.toString());
+        await _cloudStoreDataManagement.getAllUsersListExceptMyAccount(
+            currentUserEmail:
+                FirebaseAuth.instance.currentUser!.email.toString());
 
     final List<Map<String, dynamic>> takeUsersAfterSorted = [];
 
@@ -49,8 +49,8 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     final List<dynamic> _connectionRequestList =
-    await _cloudStoreDataManagement.currentUserConnectionRequestList(
-        email: FirebaseAuth.instance.currentUser!.email.toString());
+        await _cloudStoreDataManagement.currentUserConnectionRequestList(
+            email: FirebaseAuth.instance.currentUser!.email.toString());
 
     if (mounted) {
       setState(() {
@@ -104,10 +104,10 @@ class _SearchScreenState extends State<SearchScreen> {
                       hintStyle: TextStyle(color: Colors.white70),
                       focusedBorder: UnderlineInputBorder(
                           borderSide:
-                          BorderSide(width: 2.0, color: Colors.lightBlue)),
+                              BorderSide(width: 2.0, color: Colors.lightBlue)),
                       enabledBorder: UnderlineInputBorder(
                           borderSide:
-                          BorderSide(width: 2.0, color: Colors.lightBlue)),
+                              BorderSide(width: 2.0, color: Colors.lightBlue)),
                     ),
                     onChanged: (writeText) {
                       if (mounted) {
@@ -197,13 +197,13 @@ class _SearchScreenState extends State<SearchScreen> {
           TextButton(
               style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.0),
-                    side: BorderSide(
-                        color: _getRelevantButtonConfig(
-                            connectionStateType:
+                borderRadius: BorderRadius.circular(100.0),
+                side: BorderSide(
+                    color: _getRelevantButtonConfig(
+                        connectionStateType:
                             ConnectionStateType.ButtonBorderColor,
-                            index: index)),
-                  )),
+                        index: index)),
+              )),
               child: _getRelevantButtonConfig(
                   connectionStateType: ConnectionStateType.ButtonNameWidget,
                   index: index),
@@ -223,7 +223,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     setState(() {
                       this._myConnectionRequestCollection.add({
                         this._sortedAvailableUsers[index].keys.first.toString():
-                        OtherConnectionStatus.Request_Pending.toString(),
+                            OtherConnectionStatus.Request_Pending.toString(),
                       });
                     });
                   }
@@ -235,11 +235,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           .first
                           .toString(),
                       currentUserMail:
-                      FirebaseAuth.instance.currentUser!.email.toString(),
+                          FirebaseAuth.instance.currentUser!.email.toString(),
                       connectionUpdatedStatus:
-                      OtherConnectionStatus.Invitation_Came.toString(),
+                          OtherConnectionStatus.Invitation_Came.toString(),
                       currentUserUpdatedConnectionRequest:
-                      this._myConnectionRequestCollection);
+                          this._myConnectionRequestCollection);
                 } else if (buttonName ==
                     ConnectionStateName.Accept.toString()) {
                   if (mounted) {
@@ -255,20 +255,15 @@ class _SearchScreenState extends State<SearchScreen> {
                               ._myConnectionRequestCollection
                               .indexOf(element)] = {
                             this
-                                ._sortedAvailableUsers[index]
-                                .keys
-                                .first
-                                .toString():
-                            OtherConnectionStatus.Invitation_Accepted
-                                .toString(),
+                                    ._sortedAvailableUsers[index]
+                                    .keys
+                                    .first
+                                    .toString():
+                                OtherConnectionStatus.Invitation_Accepted
+                                    .toString(),
                           };
                         }
                       });
-
-                      // this._myConnectionRequestCollection[index] = {
-                      //   this._sortedAvailableUsers[index].keys.first.toString():
-                      //   OtherConnectionStatus.Invitation_Accepted.toString(),
-                      // };
                     });
                   }
 
@@ -279,11 +274,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           .first
                           .toString(),
                       currentUserMail:
-                      FirebaseAuth.instance.currentUser!.email.toString(),
+                          FirebaseAuth.instance.currentUser!.email.toString(),
                       connectionUpdatedStatus:
-                      OtherConnectionStatus.Request_Accepted.toString(),
+                          OtherConnectionStatus.Request_Accepted.toString(),
                       currentUserUpdatedConnectionRequest:
-                      this._myConnectionRequestCollection);
+                          this._myConnectionRequestCollection);
                 }
 
                 if (mounted) {
@@ -319,16 +314,16 @@ class _SearchScreenState extends State<SearchScreen> {
           return Text(
             _storeStatus == OtherConnectionStatus.Request_Pending.toString()
                 ? ConnectionStateName.Pending.toString()
-                .split(".")[1]
-                .toString()
+                    .split(".")[1]
+                    .toString()
                 : ConnectionStateName.Accept.toString()
-                .split(".")[1]
-                .toString(),
+                    .split(".")[1]
+                    .toString(),
             style: TextStyle(color: Colors.yellow),
           );
         else if (connectionStateType == ConnectionStateType.ButtonOnlyName)
           return _storeStatus ==
-              OtherConnectionStatus.Request_Pending.toString()
+                  OtherConnectionStatus.Request_Pending.toString()
               ? ConnectionStateName.Pending.toString()
               : ConnectionStateName.Accept.toString();
 
@@ -358,5 +353,4 @@ class _SearchScreenState extends State<SearchScreen> {
       return Colors.lightBlue;
     }
   }
-
 }
