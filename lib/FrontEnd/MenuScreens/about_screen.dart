@@ -20,7 +20,7 @@ class AboutSection extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'About Generation',
+                  'About Smile',
                   style: TextStyle(color: Colors.white, fontSize: 20.0),
                 ),
               ),
@@ -31,7 +31,7 @@ class AboutSection extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "A Private, Secure, End-to-End Encrypted Messaging app that helps you to connect with your connections without any Ads, promotion. No other third party person, organization, or even Generation Team can't read your messages. Nobody can't take screenshot or can't do screen recording of this app.",
+                  "A Private, Secure, End-to-End Encrypted Messaging app that helps you to connect with your connections without any Ads, promotion. No other third party person, organization, or even Smile Team can't read your messages. Nobody can't take screenshot or can't do screen recording of this app.",
                   textAlign: TextAlign.justify,
                   style: TextStyle(color: Colors.white70, fontSize: 16.0),
                 ),

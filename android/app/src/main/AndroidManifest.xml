@@ -9,10 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
    <application
-        android:label="smile"
+        android:label="Smile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -44,6 +43,6 @@
 
         <meta-data 
             android:name="com.google.android.geo.API_KEY"
-            android:value="API KEY"/>
+            android:value="API-KEY"/>
     </application>
 </manifest>

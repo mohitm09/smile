@@ -7,7 +7,7 @@ import 'package:smile/BackEnd/Firebase/Auth/google_auth.dart';
 import 'package:smile/FrontEnd/AuthUI/log_in.dart';
 import 'package:smile/FrontEnd/NewUserEntry/new_user_entry.dart';
 import 'package:smile/FrontEnd/MainScreens/home_page.dart';
-import 'package:smile/Global_Users/enum_generation.dart';
+import 'package:smile/Global_Users/enum_smile.dart';
 import 'package:smile/Global_Users/reg_exp.dart';
 
 import 'common_auth_methods.dart';

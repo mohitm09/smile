@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: 50.0,
             ),
-            otherInformation('About', 'Welcome to Generation'),
+            otherInformation('About', 'Welcome to Smile'),
             otherInformation('Join Date', "07-08-2021"),
             otherInformation('Join Time', "6:23 AM"),
             _deleteButton(context),

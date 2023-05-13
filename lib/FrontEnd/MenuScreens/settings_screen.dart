@@ -55,7 +55,7 @@ class _SettingsWindowState extends State<SettingsWindow> {
             height: 15.0,
           ),
           everySettingsItem(
-              mainText: 'Generation Direct Calling Setting',
+              mainText: 'Smile Direct Calling Setting',
               icon: Icons.call,
               smallDescription: 'Add Phone Number to Receive Call'),
           SizedBox(
@@ -77,7 +77,7 @@ class _SettingsWindowState extends State<SettingsWindow> {
           ),
           Center(
             child: Text(
-              'Copyright © 2021 @ Generation',
+              'Copyright © 2021 @ Smile',
               style: TextStyle(
                 color: Colors.lightBlue,
                 fontSize: 16.0,

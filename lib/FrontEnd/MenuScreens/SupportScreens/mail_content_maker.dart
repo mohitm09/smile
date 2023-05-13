@@ -168,7 +168,7 @@ class _SupportInputTakerState extends State<SupportInputTaker> {
 
     final Uri params = Uri(
       scheme: 'mailto',
-      path: 'generationofficialteam@gmail.com',
+      path: 'smileofficialteam@gmail.com',
       query:
       'subject=${widget.subject}: ${this._problemTitleController.text} &body=${this._problemDescriptionController.text}', //add subject and body here
     );

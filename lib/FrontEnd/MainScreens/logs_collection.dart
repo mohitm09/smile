@@ -15,7 +15,7 @@ class _LogsCollectionState extends State<LogsCollection> {
 
   final List<String> _callingConnection = [
     'Samarpan',
-    'Generation',
+    'Smile',
     'Paulomi',
     'Amitava',
     'Youtube',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smile/Backend/firebase/OnlineDatabaseManagement/cloud_data_management.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smile/Global_Users/enum_generation.dart';
+import 'package:smile/Global_Users/enum_smile.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -268,6 +268,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   }
 
                   await _cloudStoreDataManagement.changeConnectionStatus(
+                      storeDataAlsoInConnections: true,
                       oppositeUserMail: this
                           ._sortedAvailableUsers[index]
                           .keys

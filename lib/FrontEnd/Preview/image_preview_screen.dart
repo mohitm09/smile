@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:smile/Global_Users/enum_generation.dart';
+import 'package:smile/Global_Users/enum_smile.dart';
 
 import 'package:photo_view/photo_view.dart';
 

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smile/Global_Users/enum_generation.dart';
+import 'package:smile/Global_Users/enum_smile.dart';
 
 class EmailAndPasswordAuth{
 

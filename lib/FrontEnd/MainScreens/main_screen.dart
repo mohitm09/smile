@@ -5,6 +5,7 @@ import 'package:smile/FrontEnd/MenuScreens/about_screen.dart';
 import 'package:smile/FrontEnd/MenuScreens/profile_screen.dart';
 import 'package:smile/FrontEnd/MenuScreens/settings_screen.dart';
 import 'package:smile/FrontEnd/MenuScreens/SupportScreens/support_screen.dart';
+import 'package:smile/FrontEnd/MainScreens/home_page.dart';
 import 'general_connection_section.dart';
 import 'logs_collection.dart';
 import 'chatAndActivityScreen.dart';
@@ -192,6 +193,15 @@ class _MainScreenState extends State<MainScreen> {
               height: 10.0,
             ),
             _menuOptions(Icons.description_outlined, 'About'),
+            //
+            // logout
+            //
+            SizedBox(
+              height: 10.0,
+            ),
+            _menuOptions(Icons.logout, 'Logout'),
+            //
+            //
             SizedBox(
               height: 30.0,
             ),
@@ -228,7 +238,16 @@ class _MainScreenState extends State<MainScreen> {
            return SettingsWindow();
         else if (menuOptionIs == 'Support')
            return SupportMenuMaker();
-        else if (menuOptionIs == 'About') return AboutSection();
+        else if (menuOptionIs == 'About') 
+          return AboutSection();
+        //
+        //logout
+        //
+        else if (menuOptionIs == 'Logout')
+          return HomePage();
+        //
+        //
+        //
         return Center();
       },
       closedBuilder: (context, closeWidget) {
@@ -258,6 +277,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  
   Widget exitButtonCall() {
     return GestureDetector(
       onTap: () async {
