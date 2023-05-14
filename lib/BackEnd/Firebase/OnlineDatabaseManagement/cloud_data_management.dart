@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:smile/Global_Users/constants.dart';
 import 'package:smile/Global_Users/enum_smile.dart';
 import 'package:intl/intl.dart';
+import 'package:smile/Global_Users/send_notification_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,9 @@ import '../../Sqlite_management/local_databse_management.dart';
 
 class CloudStoreDataManagement {
   final _collectionName = 'smile_users';
+
+  final SendNotification _sendNotification = SendNotification();
+  final LocalDatabase _localDatabase = LocalDatabase();
 
   Future<bool> checkThisUserAlreadyPresentOrNot(
       {required String userName}) async {
@@ -257,7 +261,8 @@ class CloudStoreDataManagement {
 
   Future<void> sendMessageToConnection(
       {required String connectionUserName,
-        required Map<String, Map<String, String>> sendMessageData}) async {
+        required Map<String, Map<String, String>> sendMessageData,
+        required ChatMessageTypes chatMessageTypes}) async {
     try {
       final LocalDatabase _localDatabase = LocalDatabase();
 
@@ -292,9 +297,23 @@ class CloudStoreDataManagement {
           .update({
         FirestoreFieldConstants().connections:
         connectedUserData[FirestoreFieldConstants().connections],
-      }).whenComplete(() {
+      }).whenComplete(() async {
         print('Data Send Completed');
       });
+
+      final String? connectionToken =
+      await _localDatabase.getParticularFieldDataFromImportantTable(
+          userName: connectionUserName,
+          getField: GetFieldForImportantDataLocalDatabase.Token);
+
+      final String? currentAccountUserName =
+      await _localDatabase.getUserNameForCurrentUser(
+          FirebaseAuth.instance.currentUser!.email.toString());
+
+      await _sendNotification.messageNotificationClassifier(chatMessageTypes,
+          connectionToken: connectionToken ?? "",
+          currAccountUserName: currentAccountUserName ?? "");
+
     } catch (e) {
       print('error in Send Data: ${e.toString()}');
     }

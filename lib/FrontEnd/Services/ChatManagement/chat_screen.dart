@@ -434,7 +434,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           body: LoadingOverlay(
             isLoading: this._isLoading,
-            color: Colors.lightBlue,
+            color: Colors.black54,
             child: Container(
               width: double.maxFinite,
               height: double.maxFinite,
@@ -1269,6 +1269,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
             if (downloadedDocumentPath != null) {
               await _cloudStoreDataManagement.sendMessageToConnection(
+                  chatMessageTypes: ChatMessageTypes.Document,
                   connectionUserName: widget.userName,
                   sendMessageData: {
                     ChatMessageTypes.Document.toString(): {
@@ -1418,6 +1419,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           "${DateTime.now().hour}:${DateTime.now().minute}";
 
                       await _cloudStoreDataManagement.sendMessageToConnection(
+                          chatMessageTypes: ChatMessageTypes.Location,
                           connectionUserName: widget.userName,
                           sendMessageData: {
                             ChatMessageTypes.Location.toString(): {
@@ -1691,6 +1693,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       if (downloadedVoicePath != null) {
         await _cloudStoreDataManagement.sendMessageToConnection(
+            chatMessageTypes: ChatMessageTypes.Audio,
             connectionUserName: widget.userName,
             sendMessageData: {
               ChatMessageTypes.Audio.toString(): {
@@ -1843,7 +1846,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ChatMessageTypes.Text.toString(): {
               this._typedText.text: _messageTime,
             },
-          });
+          },
+          chatMessageTypes: ChatMessageTypes.Text);
 
       if (mounted) {
         setState(() {
@@ -1921,6 +1925,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (downloadedImagePath != null) {
       await _cloudStoreDataManagement.sendMessageToConnection(
+          chatMessageTypes: ChatMessageTypes.Image,
           connectionUserName: widget.userName,
           sendMessageData: {
             ChatMessageTypes.Image.toString(): {
@@ -1970,7 +1975,8 @@ class _ChatScreenState extends State<ChatScreen> {
               "${downloadedVideoPath.toString()}+${downloadedVideoThumbnailPath.toString()}":
                   _messageTime
             }
-          });
+          },
+          chatMessageTypes: ChatMessageTypes.Video);
 
       await _localDatabase.insertMessageInUserTable(
           userName: widget.userName,
