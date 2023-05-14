@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final NativeCallback _nativeCallback = NativeCallback();
   final CloudStoreDataManagement _cloudStoreDataManagement =
-    CloudStoreDataManagement();
+      CloudStoreDataManagement();
   final LocalDatabase _localDatabase = LocalDatabase();
 
   /// Audio Player and Dio Downloader Initialized
@@ -95,7 +95,8 @@ class _ChatScreenState extends State<ChatScreen> {
   /// For Audio Player
   IconData _iconData = Icons.play_arrow_rounded;
 
-  final FirestoreFieldConstants _firestoreFieldConstants = FirestoreFieldConstants();
+  final FirestoreFieldConstants _firestoreFieldConstants =
+      FirestoreFieldConstants();
 
   _takePermissionForStorage() async {
     var status = await Permission.storage.request();
@@ -125,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
             userName: widget.userName,
             getField: GetFieldForImportantDataLocalDatabase.UserEmail);
 
-    if(mounted){
+    if (mounted) {
       setState(() {
         this._connectionEmail = getUserEmail.toString();
       });
@@ -177,6 +178,11 @@ class _ChatScreenState extends State<ChatScreen> {
               _manageIncomingMediaMessages(
                   everyMessage.values.first, ChatMessageTypes.Video);
             });
+          } else if (everyMessage.keys.first.toString() ==
+              ChatMessageTypes.Location.toString()) {
+            Future.microtask(() {
+              _manageIncomingLocationMessages(everyMessage.values.first);
+            });
           }
         });
       });
@@ -185,7 +191,28 @@ class _ChatScreenState extends State<ChatScreen> {
     print('Get Incoming Messages: $getIncomingMessages');
   }
 
-  _manageIncomingTextMessages(var textMessage)async{
+  _manageIncomingLocationMessages(var locationMessage) async {
+    await _localDatabase.insertMessageInUserTable(
+        userName: widget.userName,
+        actualMessage: locationMessage.keys.first.toString(),
+        chatMessageTypes: ChatMessageTypes.Location,
+        messageHolderType: MessageHolderType.ConnectedUsers,
+        messageDateLocal: DateTime.now().toString().split(" ")[0],
+        messageTimeLocal: locationMessage.values.first.toString());
+
+    if (mounted) {
+      setState(() {
+        this._allConversationMessages.add({
+          locationMessage.keys.first.toString():
+              locationMessage.values.first.toString(),
+        });
+        this._chatMessageCategoryHolder.add(ChatMessageTypes.Location);
+        this._conversationMessageHolder.add(true);
+      });
+    }
+  }
+
+  _manageIncomingTextMessages(var textMessage) async {
     await _localDatabase.insertMessageInUserTable(
         userName: widget.userName,
         actualMessage: textMessage.keys.first.toString(),
@@ -197,7 +224,8 @@ class _ChatScreenState extends State<ChatScreen> {
     if (mounted) {
       setState(() {
         this._allConversationMessages.add({
-          textMessage.keys.first.toString(): textMessage.values.first.toString(),
+          textMessage.keys.first.toString():
+              textMessage.values.first.toString(),
         });
         this._chatMessageCategoryHolder.add(ChatMessageTypes.Text);
         this._conversationMessageHolder.add(true);
@@ -332,7 +360,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     this._chatBoxHeight = MediaQuery.of(context).size.height - 160;
@@ -1332,12 +1360,27 @@ class _ChatScreenState extends State<ChatScreen> {
                 actions: [
                   FloatingActionButton(
                     child: Icon(Icons.send),
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(context);
                       Navigator.pop(context);
 
+                      if (mounted) {
+                        setState(() {
+                          this._isLoading = true;
+                        });
+                      }
+
                       final String _messageTime =
                           "${DateTime.now().hour}:${DateTime.now().minute}";
+
+                      await _cloudStoreDataManagement.sendMessageToConnection(
+                          connectionUserName: widget.userName,
+                          sendMessageData: {
+                            ChatMessageTypes.Location.toString(): {
+                              "${position.latitude}+${position.longitude}":
+                                  _messageTime,
+                            },
+                          });
 
                       if (mounted) {
                         setState(() {
@@ -1349,8 +1392,23 @@ class _ChatScreenState extends State<ChatScreen> {
                           this
                               ._chatMessageCategoryHolder
                               .add(ChatMessageTypes.Location);
-                          this._conversationMessageHolder.add(_lastDirection);
-                          _lastDirection = !_lastDirection;
+                          this._conversationMessageHolder.add(false);
+                        });
+                      }
+
+                      await _localDatabase.insertMessageInUserTable(
+                          userName: widget.userName,
+                          actualMessage:
+                              "${position.latitude}+${position.longitude}",
+                          chatMessageTypes: ChatMessageTypes.Location,
+                          messageHolderType: MessageHolderType.Me,
+                          messageDateLocal:
+                              DateTime.now().toString().split(" ")[0],
+                          messageTimeLocal: _messageTime);
+
+                      if (mounted) {
+                        setState(() {
+                          this._isLoading = false;
                         });
                       }
                     },
@@ -1803,6 +1861,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     }
   }
+
   Future<void> _sendImage(String imageFilePath) async {
     if (mounted) {
       setState(() {

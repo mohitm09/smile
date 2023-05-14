@@ -8,18 +8,16 @@ import 'package:smile/FrontEnd/MainScreens/main_screen.dart';
 import 'package:smile/FrontEnd/NewUserEntry/new_user_entry.dart';
 import 'FrontEnd/AuthUI/sign_up.dart';
 
-Future<void> main()async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(
-    MaterialApp(
-      title: 'smile',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.dark,
-      home: await differentContextDecisionTake(),
-    )
-  );
+  runApp(MaterialApp(
+    title: 'smile',
+    debugShowCheckedModeBanner: false,
+    themeMode: ThemeMode.dark,
+    home: await differentContextDecisionTake(),
+  ));
 }
 
 Future<Widget> differentContextDecisionTake() async {
