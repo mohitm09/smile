@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:smile/Global_Users/enum_smile.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../FrontEnd/model/previous_message_structure.dart';
+
 class LocalDatabase {
   /// For Important Table
   final String _importantTableData = "__Important_Table_Data__"; // Table Name

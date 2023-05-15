@@ -68,7 +68,7 @@ Future<void> notificationInitialize() async {
 void _receiveAndShowNotificationInitialization(
     {required String title, required String body}) async {
   final ForegroundNotificationManagement _fgNotifyManagement =
-  ForegroundNotificationManagement();
+      ForegroundNotificationManagement();
 
   print("Notification Activated");
 

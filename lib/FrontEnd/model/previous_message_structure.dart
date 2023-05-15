@@ -1,4 +1,4 @@
-import 'package:generation/Global_Uses/enum_generation.dart';
+import 'package:smile/Global_Users/enum_smile.dart';
 
 class PreviousMessageStructure {
   late String actualMessage;
