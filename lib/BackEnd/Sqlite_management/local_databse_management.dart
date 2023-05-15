@@ -144,12 +144,12 @@ class LocalDatabase {
 
   Future<String?> getParticularFieldDataFromImportantTable(
       {required String userName,
-        required GetFieldForImportantDataLocalDatabase getField}) async {
+      required GetFieldForImportantDataLocalDatabase getField}) async {
     try {
       final Database db = await this.database;
 
       final String? _particularSearchField =
-      _getFieldNameHelpWithEnumerators(getField);
+          _getFieldNameHelpWithEnumerators(getField);
 
       List<Map<String, Object?>> getResult = await db.rawQuery(
           "SELECT $_particularSearchField FROM ${this._importantTableData} WHERE $_colUserName = '$userName'");
@@ -231,6 +231,7 @@ class LocalDatabase {
       return false;
     }
   }
+
   Future<void> createTableForEveryUser({required String userName}) async {
     try {
       final Database db = await this.database;
@@ -244,11 +245,11 @@ class LocalDatabase {
 
   Future<void> insertMessageInUserTable(
       {required String userName,
-        required String actualMessage,
-        required ChatMessageTypes chatMessageTypes,
-        required MessageHolderType messageHolderType,
-        required String messageDateLocal,
-        required String messageTimeLocal}) async {
+      required String actualMessage,
+      required ChatMessageTypes chatMessageTypes,
+      required MessageHolderType messageHolderType,
+      required String messageDateLocal,
+      required String messageTimeLocal}) async {
     try {
       final Database db = await this.database;
 
@@ -264,6 +265,28 @@ class LocalDatabase {
       print('Row Affected: $rowAffected');
     } catch (e) {
       print('Error in Insert Message In User Table: ${e.toString()}');
+    }
+  }
+
+  Future<List<PreviousMessageStructure>> getAllPreviousMessages(
+      String userName) async {
+    try {
+      final Database db = await this.database;
+
+      final List<Map<String, Object?>> result =
+          await db.rawQuery("SELECT * from $userName");
+
+      List<PreviousMessageStructure> takePreviousMessages = [];
+
+      for (int i = 0; i < result.length; i++) {
+        Map<String, dynamic> tempMap = result[i];
+        takePreviousMessages.add(PreviousMessageStructure.toJson(tempMap));
+      }
+
+      return takePreviousMessages;
+    } catch (e) {
+      print("Error is: $e");
+      return [];
     }
   }
 }

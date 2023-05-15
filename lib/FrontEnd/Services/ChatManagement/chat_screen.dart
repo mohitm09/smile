@@ -5,9 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
 import 'package:smile/Backend/firebase/OnlineDatabaseManagement/cloud_data_management.dart';
 import 'package:smile/Global_Users/constants.dart';
+import 'package:smile/FrontEnd/model/previous_message_structure.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -351,14 +351,49 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  _loadPreviousStoredMessages() async {
+    try {
+      if (mounted) {
+        setState(() {
+          this._isLoading = true;
+        });
+      }
+
+      List<PreviousMessageStructure> _storedPreviousMessages =
+          await _localDatabase.getAllPreviousMessages(widget.userName);
+
+      for (int i = 0; i < _storedPreviousMessages.length; i++) {
+        final PreviousMessageStructure _previousMessage =
+            _storedPreviousMessages[i];
+
+        if (mounted) {
+          setState(() {
+            this._allConversationMessages.add({
+              _previousMessage.actualMessage: _previousMessage.messageTime,
+            });
+            this._chatMessageCategoryHolder.add(_previousMessage.messageType);
+            this._conversationMessageHolder.add(_previousMessage.messageHolder);
+          });
+        }
+      }
+    } catch (e) {
+      print("Previous Message Fetching Error in ChatScreen: ${e.toString()}");
+    } finally {
+      if (mounted) {
+        setState(() {
+          this._isLoading = false;
+        });
+      }
+      await _fetchIncomingMessages();
+    }
+  }
+
   @override
   void initState() {
     _fToast.init(context);
-
     _takePermissionForStorage();
     _getConnectionEmail();
-
-    _fetchIncomingMessages();
+    _loadPreviousStoredMessages();
     super.initState();
   }
 
