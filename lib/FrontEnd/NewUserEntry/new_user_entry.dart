@@ -19,7 +19,19 @@ class TakePrimaryUserData extends StatefulWidget {
 }
 
 class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
-
+    String gender = "";
+    String rating = "";
+    String problems = "";
+    String happiness = "";
+    String selfEsteem = "";
+    String outlook = "";
+    String usedApps = "";
+    String appsFree = "";
+    String anonymity = "";
+    String dataComfort = "";
+    String makesDifference = "";
+    String interested = "";
+    String feature = "";
     bool _isLoading = false;
 
     final GlobalKey<FormState> _takeUserPrimaryInformationKey = GlobalKey<FormState>();
@@ -40,42 +52,250 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
             child:Container(
               width : MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Form(
-                key: this._takeUserPrimaryInformationKey,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    commonTextFormField(
-                      bottomPadding: 30.0,
-                        hintText:'User Name',
-                        validator: (inputUserName){
-                        final RegExp _messageRegex = RegExp(r'[a-zA-Z0-9]');
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Form(
+                  key: this._takeUserPrimaryInformationKey,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      _upperHeading(),
+                      commonTextFormField(
+                        bottomPadding: 30.0,
+                          hintText:'User Name',
+                          validator: (inputUserName){
+                          final RegExp _messageRegex = RegExp(r'[a-zA-Z0-9]');
 
-                          if (inputUserName!.length <6)
-                            return "User Name At Least 6 Characters";
-                          else if (inputUserName.contains(' ') ||
-                              inputUserName.contains('@'))
-                            return "Space and @ Not Allowed...User '_' instead of space";
-                          else if (inputUserName.contains('__'))
-                            return "'__' Not Allowed...User '_' Instead of '__'";
-                          else if (!_messageRegex.hasMatch(inputUserName))
-                            return "Sorry, Only Emoji Not Supported";
-                          return null;
-                    }, textEditingController: this._userName),
+                            if (inputUserName!.length <6)
+                              return "User Name At Least 6 Characters";
+                            else if (inputUserName.contains(' ') ||
+                                inputUserName.contains('@'))
+                              return "Space and @ Not Allowed...User '_' instead of space";
+                            else if (inputUserName.contains('__'))
+                              return "'__' Not Allowed...User '_' Instead of '__'";
+                            else if (!_messageRegex.hasMatch(inputUserName))
+                              return "Sorry, Only Emoji Not Supported";
+                            return null;
+                      }, textEditingController: this._userName),
 
-                    commonTextFormField(hintText:'User About',
-                        validator: (inputVal){
-                      if (inputVal!.length<6)
-                        return '9User About must have 6 characters';
-                      return null;
+                      commonTextFormField(hintText:'User About',
+                          validator: (inputVal){
+                        if (inputVal!.length<6)
+                          return 'User About must have 6 characters';
+                        return null;
 
-                    }, textEditingController: this._userAbout),
+                      }, textEditingController: this._userAbout),
 
-                    _saveUserPrimaryInformation(),
+                      Text(
+                        'Gender',
+                        style: TextStyle(fontSize: 18.0, color: Colors.white,),
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('Male', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Male',
+                        groupValue: gender,
+                        onChanged: (value) {
+                          setState(() {
+                            gender = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Female', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Female',
+                        groupValue: gender,
+                        onChanged: (value) {
+                          setState(() {
+                            gender = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Overall mental health rating',
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('Below Average', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Poor',
+                        groupValue: rating,
+                        onChanged: (value) {
+                          setState(() {
+                            rating = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Average', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: '5',
+                        groupValue: rating,
+                        onChanged: (value) {
+                          setState(() {
+                            rating = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Excellent', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Excellent',
+                        groupValue: rating,
+                        onChanged: (value) {
+                          setState(() {
+                            rating = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Problems with work or daily life due to emotional problems',
+                          style: TextStyle(fontSize: 18.0, color: Colors.white,)
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('No', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'No',
+                        groupValue: problems,
+                        onChanged: (value) {
+                          setState(() {
+                            problems = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Yes', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Yes',
+                        groupValue: problems,
+                        onChanged: (value) {
+                          setState(() {
+                            problems = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Maybe', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Maybe',
+                        groupValue: problems,
+                        onChanged: (value) {
+                          setState(() {
+                            problems = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Last time you were really happy',
+                          style: TextStyle(fontSize: 18.0, color: Colors.white,)
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('Few days ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few days ago',
+                        groupValue: happiness,
+                        onChanged: (value) {
+                          setState(() {
+                            happiness = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few weeks ago',
+                        groupValue: happiness,
+                        onChanged: (value) {
+                          setState(() {
+                            happiness = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few months ago',
+                        groupValue: happiness,
+                        onChanged: (value) {
+                          setState(() {
+                            happiness = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Last time you felt good about yourself',
+                          style: TextStyle(fontSize: 18.0, color: Colors.white,)
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('Few days ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few days ago',
+                        groupValue: selfEsteem,
+                        onChanged: (value) {
+                          setState(() {
+                            selfEsteem = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few weeks ago',
+                        groupValue: selfEsteem,
+                        onChanged: (value) {
+                          setState(() {
+                            selfEsteem = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few months ago',
+                        groupValue: selfEsteem,
+                        onChanged: (value) {
+                          setState(() {
+                            selfEsteem = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Last time you had a positive outlook on life',
+                          style: TextStyle(fontSize: 18.0, color: Colors.white,)
+                      ),
+                      SizedBox(height: 8.0),
+                      RadioListTile(
+                        title: Text('Few days ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few days ago',
+                        groupValue: outlook,
+                        onChanged: (value) {
+                          setState(() {
+                            outlook = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few weeks ago',
+                        groupValue: outlook,
+                        onChanged: (value) {
+                          setState(() {
+                            outlook = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Few months ago',
+                        groupValue: outlook,
+                        onChanged: (value) {
+                          setState(() {
+                            outlook = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 30.0),
+                      _saveUserPrimaryInformation(),
 
-
-
-                  ]
+                    ]
+                  ),
                 ),
               ),
             )

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:smile/FrontEnd/MenuScreens/about_screen.dart';
 import 'package:smile/FrontEnd/MenuScreens/profile_screen.dart';
+import 'package:smile/FrontEnd/MenuScreens/ecard.dart';
 import 'package:smile/FrontEnd/MenuScreens/settings_screen.dart';
 import 'package:smile/FrontEnd/MenuScreens/SupportScreens/support_screen.dart';
 import 'package:smile/FrontEnd/MainScreens/home_page.dart';
@@ -59,12 +60,12 @@ class _MainScreenState extends State<MainScreen> {
                 padding: EdgeInsets.only(right: 10.0),
                 child: IconButton(
                   icon: Icon(
-                    Icons.search,
+                    Icons.contact_phone_outlined,
                     size: 25.0,
                   ),
                   onPressed: () {
                     Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => ProfileScreen()));
+                    MaterialPageRoute(builder: (_) => ecard()));
                   }
                 ),
               ),
