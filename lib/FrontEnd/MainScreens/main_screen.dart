@@ -57,9 +57,15 @@ class _MainScreenState extends State<MainScreen> {
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: 10.0),
-                child: Icon(
-                  Icons.search_outlined,
-                  size: 25.0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    size: 25.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ProfileScreen()));
+                  }
                 ),
               ),
               Padding(
