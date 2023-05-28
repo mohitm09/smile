@@ -4,9 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:smile/BackEnd/Firebase/Auth/email_and_pwd_auth.dart';
 import 'package:smile/BackEnd/Firebase/Auth/google_auth.dart';
-import 'package:smile/FrontEnd/AuthUI/log_in.dart';
 import 'package:smile/FrontEnd/NewUserEntry/new_user_entry.dart';
-import 'package:smile/FrontEnd/MainScreens/home_page.dart';
 import 'package:smile/Global_Users/enum_smile.dart';
 import 'package:smile/Global_Users/reg_exp.dart';
 
@@ -135,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             
             final EmailSignUpResults response = await this._emailAndPasswordAuth.signUpAuth(email: this._email.text, password: this._password.text);
             if(response == EmailSignUpResults.SignUpCompleted){
-              Navigator.push(context, MaterialPageRoute(builder: (_) => LogInScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => TakePrimaryUserData()));
             }else{
               final String msg = response == EmailSignUpResults.EmailAlreadtExist?'Email Already Exist': 'SignUp Not Completed';
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));

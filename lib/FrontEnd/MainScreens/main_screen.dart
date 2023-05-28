@@ -81,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
           body: TabBarView(
             children: [
               ChatAndActivityScreen(),
-              LogsCollection(),
+              // LogsCollection(),
               GeneralMessagingSection(),
             ],
           ),
@@ -123,18 +123,18 @@ class _MainScreenState extends State<MainScreen> {
               letterSpacing: 1.0,
             ),
           ),
-        ),
-        Tab(
-          child: Text(
-            "Logs",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontFamily: 'Lora',
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ),
+        // ),
+        // Tab(
+        //   child: Text(
+        //     "Logs",
+        //     style: TextStyle(
+        //       fontSize: 20.0,
+        //       fontFamily: 'Lora',
+        //       fontWeight: FontWeight.w500,
+        //       letterSpacing: 1.0,
+        //     ),
+        //   ),
+         ),
         Tab(
           icon: Icon(
             Icons.store,
