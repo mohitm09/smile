@@ -6,7 +6,7 @@ class FirestoreFieldConstants{
   final String creationDate = "creation_date";
   final String creationTime = "creation_time";
   final String phoneNumber = "phone_number";
-  final String category = "category";
+  final String userCategory = "user_category";
   final String profilePic = "profile_pic";
   final String token = "token";
   final String totalConnections = "total_connections";

@@ -107,7 +107,7 @@ class CloudStoreDataManagement {
   }
 
   Future<List<Map<String, dynamic>>> getAllUsersListExceptMyAccount(
-      {required String currentUserEmail}) async {
+      {required String currentUserEmail, required String category}) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
       await FirebaseFirestore.instance
@@ -118,7 +118,8 @@ class CloudStoreDataManagement {
 
       querySnapshot.docs.forEach(
               (QueryDocumentSnapshot<Map<String, dynamic>> queryDocumentSnapshot) {
-            if (currentUserEmail != queryDocumentSnapshot.id )
+                print(queryDocumentSnapshot.get("user_category"));
+            if (currentUserEmail != queryDocumentSnapshot.id && queryDocumentSnapshot.get("user_category") == category)
               _usersDataCollection.add({
                 queryDocumentSnapshot.id:
                 '${queryDocumentSnapshot.get("user_name")}[user-name-about-divider]${queryDocumentSnapshot.get("about")}',

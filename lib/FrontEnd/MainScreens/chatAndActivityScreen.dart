@@ -58,7 +58,7 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
             final String _about =
             everyDocument.get(_firestoreFieldConstants.about);
             final String _category =
-            everyDocument.get(_firestoreFieldConstants.category);
+            everyDocument.get(_firestoreFieldConstants.userCategory);
             final String _accCreationDate =
             everyDocument.get(_firestoreFieldConstants.creationDate);
             final String _accCreationTime =

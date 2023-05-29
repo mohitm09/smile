@@ -108,7 +108,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       SizedBox(height: 8.0),
                       RadioListTile(
                         title: Text('Okay', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: '5',
+                        value: 'Okay',
                         groupValue: rating,
                         onChanged: (value) {
                           setState(() {
@@ -118,7 +118,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       ),
                       RadioListTile(
                         title: Text('Not Okay', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Excellent',
+                        value: 'Not Okay',
                         groupValue: rating,
                         onChanged: (value) {
                           setState(() {
@@ -170,7 +170,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       ),
                       RadioListTile(
                         title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few weeks ago',
+                        value: 'One week ago',
                         groupValue: happiness,
                         onChanged: (value) {
                           setState(() {
@@ -196,7 +196,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       ),
                       RadioListTile(
                         title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few weeks ago',
+                        value: 'One week ago',
                         groupValue: selfEsteem,
                         onChanged: (value) {
                           setState(() {

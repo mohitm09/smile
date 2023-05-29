@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smile/Backend/firebase/OnlineDatabaseManagement/cloud_data_management.dart';
@@ -13,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final _collectionName = 'smile_users';
   List<Map<String, dynamic>> _availableUsers = [];
   List<Map<String, dynamic>> _sortedAvailableUsers = [];
   List<dynamic> _myConnectionRequestCollection = [];
@@ -22,17 +24,54 @@ class _SearchScreenState extends State<SearchScreen> {
   final CloudStoreDataManagement _cloudStoreDataManagement =
       CloudStoreDataManagement();
 
+  Future<Map<String, dynamic>> getTokenFromCloudStore(
+      {required String userMail}) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+      await FirebaseFirestore.instance
+          .doc('${this._collectionName}/$userMail')
+          .get();
+
+      final Map<String, dynamic> importantData = Map<String, dynamic>();
+      importantData["userCategory"] = documentSnapshot.data()!["user_category"];
+
+
+      return importantData;
+    } catch (e) {
+      print('Error in get Token from Cloud Store: ${e.toString()}');
+      return {};
+    }
+  }
+
+  Future<String> fetchUserCategory() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final Map<String, dynamic> tokenData =
+        await getTokenFromCloudStore(userMail: currentUser.email.toString());
+        String userCategory = tokenData['userCategory'] ?? '';
+        print('user category 1 is $userCategory');
+        return userCategory;
+      }
+    } catch (e) {
+      // Handle error
+      print('Error fetching token: $e');
+    }
+    return ''; // Return a default value if userCategory cannot be fetched
+  }
+
   Future<void> _initialDataFetchAndCheckUp() async {
     if (mounted) {
       setState(() {
         this._isLoading = true;
       });
     }
-
+    final userCategory = await fetchUserCategory();
     final List<Map<String, dynamic>> takeUsers =
         await _cloudStoreDataManagement.getAllUsersListExceptMyAccount(
             currentUserEmail:
-                FirebaseAuth.instance.currentUser!.email.toString());
+                FirebaseAuth.instance.currentUser!.email.toString(), category: userCategory);
+                print('user category 2 is $userCategory');
 
     final List<Map<String, dynamic>> takeUsersAfterSorted = [];
 

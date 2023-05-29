@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
               side: BorderSide(width: 0.7),
             ),
             title: Text(
-              "smile",
+              "Smile",
               style: TextStyle(
                   fontSize: 25.0, fontFamily: 'Lora', letterSpacing: 1.0),
             ),
