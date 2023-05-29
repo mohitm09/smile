@@ -2,8 +2,11 @@ import 'dart:async';
 
 
 import 'package:animations/animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smile/BackEnd/sqlite_management/local_databse_management.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -23,6 +26,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String userName = '';
+  String userAbout = '';
+  String userCategory = '';
+  String userDate = '';
+  String userTime = '';
+  final _collectionName = 'smile_users';
   // String _userAbout = '', _userAccCreationDate = '', _userAccCreationTime = '';
 
   // final FToast _fToast = FToast();
@@ -32,6 +41,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // final LocalStorageHelper _localStorageHelper = LocalStorageHelper();
 
   bool _isLoading = false;
+  final LocalDatabase _localDatabase = LocalDatabase();
+
+  final String userEmail =
+    FirebaseAuth.instance.currentUser!.email.toString();
+
+  Future<Map<String, dynamic>> getTokenFromCloudStore(
+      {required String userMail}) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+      await FirebaseFirestore.instance
+          .doc('${this._collectionName}/$userMail')
+          .get();
+
+      final Map<String, dynamic> importantData = Map<String, dynamic>();
+
+      importantData["userName"] = documentSnapshot.data()!["user_name"];
+      importantData["userAbout"] = documentSnapshot.data()!["about"];
+      importantData["userCategory"] = documentSnapshot.data()!["user_category"];
+      importantData["date"] = documentSnapshot.data()!["creation_date"];
+      importantData["time"] = documentSnapshot.data()!["creation_time"];
+
+      print('Important data is: $importantData');
+
+      return importantData;
+    } catch (e) {
+      print('Error in get Token from Cloud Store: ${e.toString()}');
+      return {};
+    }
+  }
+
   //
   // void _getOtherProfileInformation() async {
   //   final String userTempAbout =
@@ -68,6 +107,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // ImportantThings.findImageUrlAndUserName();
     // _getOtherProfileInformation();
     super.initState();
+    fetchUserName();
+  }
+  Future<void> fetchUserName() async {
+    try {
+      final Map<String, dynamic> tokenData =
+      await getTokenFromCloudStore(userMail: userEmail);
+      setState(() {
+        userName = tokenData['userName'] ?? '';
+        userAbout = tokenData['userAbout'] ?? '';
+        userCategory = tokenData['userCategory'] ?? '';
+        userDate = tokenData['date'] ?? '';
+        userTime = tokenData['time'] ?? '';
+      });
+    } catch (e) {
+      // Handle error
+      print('Error fetching token: $e');
+    }
   }
 
   @override
@@ -85,9 +141,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: 50.0,
             ),
-            otherInformation('About', 'Welcome to Smile'),
-            otherInformation('Join Date', "07-08-2021"),
-            otherInformation('Join Time', "6:23 AM"),
+
+            otherInformation('About', userAbout),
+            otherInformation('Category', userCategory),
+            otherInformation('Join Date', userDate),
+            otherInformation('Join Time', userTime),
           ],
         ),
       ),
@@ -196,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                'Samarpan Dasgupta',
+                userName,
                 style: TextStyle(
                   fontSize: 20.0,
                   fontFamily: 'Lora',
@@ -239,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               margin: EdgeInsets.only(right: 10.0),
               alignment: Alignment.centerRight,
               child: Text(
-                rightText,
+                '${rightText}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.0,

@@ -57,6 +57,8 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
             everyDocument.get(_firestoreFieldConstants.token);
             final String _about =
             everyDocument.get(_firestoreFieldConstants.about);
+            final String _category =
+            everyDocument.get(_firestoreFieldConstants.category);
             final String _accCreationDate =
             everyDocument.get(_firestoreFieldConstants.creationDate);
             final String _accCreationTime =
@@ -78,7 +80,8 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
                 userToken: _token,
                 userAbout: _about,
                 userAccCreationDate: _accCreationDate,
-                userAccCreationTime: _accCreationTime);
+                userAccCreationTime: _accCreationTime,
+                userCategory: _category);
 
             if (_newConnectionUserNameInserted) {
               await _localDatabase.createTableForEveryUser(

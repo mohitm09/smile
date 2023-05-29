@@ -24,14 +24,6 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
     String problems = "";
     String happiness = "";
     String selfEsteem = "";
-    String outlook = "";
-    String usedApps = "";
-    String appsFree = "";
-    String anonymity = "";
-    String dataComfort = "";
-    String makesDifference = "";
-    String interested = "";
-    String feature = "";
     bool _isLoading = false;
 
     final GlobalKey<FormState> _takeUserPrimaryInformationKey = GlobalKey<FormState>();
@@ -118,17 +110,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       ),
                       SizedBox(height: 8.0),
                       RadioListTile(
-                        title: Text('Below Average', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Poor',
-                        groupValue: rating,
-                        onChanged: (value) {
-                          setState(() {
-                            rating = value!;
-                          });
-                        },
-                      ),
-                      RadioListTile(
-                        title: Text('Average', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        title: Text('Okay', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
                         value: '5',
                         groupValue: rating,
                         onChanged: (value) {
@@ -138,7 +120,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                         },
                       ),
                       RadioListTile(
-                        title: Text('Excellent', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        title: Text('Not Okay', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
                         value: 'Excellent',
                         groupValue: rating,
                         onChanged: (value) {
@@ -173,16 +155,6 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                           });
                         },
                       ),
-                      RadioListTile(
-                        title: Text('Maybe', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Maybe',
-                        groupValue: problems,
-                        onChanged: (value) {
-                          setState(() {
-                            problems = value!;
-                          });
-                        },
-                      ),
                       SizedBox(height: 16.0),
                       Text(
                         'Last time you were really happy',
@@ -202,16 +174,6 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       RadioListTile(
                         title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
                         value: 'Few weeks ago',
-                        groupValue: happiness,
-                        onChanged: (value) {
-                          setState(() {
-                            happiness = value!;
-                          });
-                        },
-                      ),
-                      RadioListTile(
-                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few months ago',
                         groupValue: happiness,
                         onChanged: (value) {
                           setState(() {
@@ -242,52 +204,6 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                         onChanged: (value) {
                           setState(() {
                             selfEsteem = value!;
-                          });
-                        },
-                      ),
-                      RadioListTile(
-                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few months ago',
-                        groupValue: selfEsteem,
-                        onChanged: (value) {
-                          setState(() {
-                            selfEsteem = value!;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Last time you had a positive outlook on life',
-                          style: TextStyle(fontSize: 18.0, color: Colors.white,)
-                      ),
-                      SizedBox(height: 8.0),
-                      RadioListTile(
-                        title: Text('Few days ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few days ago',
-                        groupValue: outlook,
-                        onChanged: (value) {
-                          setState(() {
-                            outlook = value!;
-                          });
-                        },
-                      ),
-                      RadioListTile(
-                        title: Text('One week ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few weeks ago',
-                        groupValue: outlook,
-                        onChanged: (value) {
-                          setState(() {
-                            outlook = value!;
-                          });
-                        },
-                      ),
-                      RadioListTile(
-                        title: Text('Two weeks ago', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Few months ago',
-                        groupValue: outlook,
-                        onChanged: (value) {
-                          setState(() {
-                            outlook = value!;
                           });
                         },
                       ),
@@ -359,7 +275,34 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
               if(!canRegisterNewUser)
                 msg = 'User Name Already present';
               else{
-                final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString());
+
+                // Define the category variable
+                String category = '';
+
+                // Check the conditions to determine the category
+                if (rating == 'Excellent' &&
+                    problems == 'No' &&
+                    happiness == 'Few days ago' &&
+                    selfEsteem == 'Few days ago') {
+                  category = 'Category One';
+                } else if (rating == 'Average' &&
+                    problems == 'Maybe' &&
+                    happiness == 'One week ago' &&
+                    selfEsteem == 'One week ago') {
+                  category = 'Category Two';
+                } else if (rating == 'Average' &&
+                    problems == 'Yes' &&
+                    happiness == 'One week ago' &&
+                    selfEsteem == 'One week ago') {
+                  category = 'Category Three';
+                } else if (rating == 'Below Average' &&
+                    problems == 'Yes' &&
+                    happiness == 'Few weeks ago' &&
+                    selfEsteem == 'Few weeks ago') {
+                  category = 'Category Four';
+                }
+
+                final bool _userEntryResponse = await _cloudStoreDataManagement.registerNewUser(userName: this._userName.text, userAbout: this._userAbout.text, userEmail:FirebaseAuth.instance.currentUser!.email.toString(), userCategory: category);
                 if (_userEntryResponse) {
                   msg = 'User data Entry Successfully';
 
@@ -375,6 +318,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       userMail: FirebaseAuth.instance.currentUser!.email.toString(),
                       userToken: _importantFetchedData["token"],
                       userAbout: this._userAbout.text,
+                      userCategory: category,
                       userAccCreationDate: _importantFetchedData["date"],
                       userAccCreationTime: _importantFetchedData["time"]);
 

@@ -39,7 +39,8 @@ class CloudStoreDataManagement {
   Future<bool> registerNewUser(
       {required String userName,
         required String userAbout,
-        required String userEmail}) async {
+        required String userEmail,
+        required String userCategory}) async {
     try {
       final String? _getToken = await FirebaseMessaging.instance.getToken();
 
@@ -59,6 +60,7 @@ class CloudStoreDataManagement {
         "token": _getToken.toString(),
         "total_connections": "",
         "user_name": userName,
+        "user_category": userCategory,
       });
 
       return true;
@@ -116,7 +118,7 @@ class CloudStoreDataManagement {
 
       querySnapshot.docs.forEach(
               (QueryDocumentSnapshot<Map<String, dynamic>> queryDocumentSnapshot) {
-            if (currentUserEmail != queryDocumentSnapshot.id)
+            if (currentUserEmail != queryDocumentSnapshot.id )
               _usersDataCollection.add({
                 queryDocumentSnapshot.id:
                 '${queryDocumentSnapshot.get("user_name")}[user-name-about-divider]${queryDocumentSnapshot.get("about")}',

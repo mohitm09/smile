@@ -70,6 +70,7 @@ enum GetFieldForImportantDataLocalDatabase {
   ProfileImagePath,
   ProfileImageUrl,
   About,
+  Category,
   WallPaper,
   MobileNumber,
   Notification,

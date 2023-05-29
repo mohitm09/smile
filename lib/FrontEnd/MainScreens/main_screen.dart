@@ -26,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: WillPopScope(
         onWillPop: () async {
           if (_currIndex > 0)
@@ -89,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               ChatAndActivityScreen(),
               // LogsCollection(),
-              GeneralMessagingSection(),
+              GeneralMessagingSection()
             ],
           ),
         ),

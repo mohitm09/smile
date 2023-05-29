@@ -16,6 +16,7 @@ class LocalDatabase {
   final String _colProfileImagePath = "Profile_Image_Path";
   final String _colProfileImageUrl = "Profile_Image_Url";
   final String _colAbout = "About";
+  final String _colCategory = "Category";
   final String _colWallpaper = "Chat_Wallpaper";
   final String _colNotification = "Notification_Status";
   final String _colMobileNumber = "User_Mobile_Number";
@@ -78,7 +79,7 @@ class LocalDatabase {
     try {
       final Database db = await this.database;
       await db.execute(
-          "CREATE TABLE ${this._importantTableData}($_colUserName TEXT PRIMARY KEY, $_colUserMail TEXT, $_colToken TEXT, $_colProfileImagePath TEXT, $_colProfileImageUrl TEXT, $_colAbout TEXT, $_colWallpaper TEXT, $_colNotification TEXT, $_colMobileNumber TEXT, $_colAccCreationDate TEXT, $_colAccCreationTime TEXT)");
+          "CREATE TABLE ${this._importantTableData}($_colUserName TEXT PRIMARY KEY, $_colUserMail TEXT, $_colToken TEXT, $_colProfileImagePath TEXT, $_colProfileImageUrl TEXT, $_colAbout TEXT, $_colCategory TEXT, $_colWallpaper TEXT, $_colNotification TEXT, $_colMobileNumber TEXT, $_colAccCreationDate TEXT, $_colAccCreationTime TEXT)");
 
       print('User Important table creatred');
     } catch (e) {
@@ -92,6 +93,7 @@ class LocalDatabase {
     required String userMail,
     required String userToken,
     required String userAbout,
+    required String userCategory,
     required String userAccCreationDate,
     required String userAccCreationTime,
     String chatWallpaper = '',
@@ -104,7 +106,7 @@ class LocalDatabase {
 
       if (purpose != 'insert') {
         final int updateResult = await db.rawUpdate(
-            "UPDATE $_importantTableData SET $_colToken = '$userToken', $_colAbout = '$userAbout', $_colUserMail = '$userMail', $_colAccCreationDate = '$userAccCreationDate', $_colAccCreationTime = '$userAccCreationTime' WHERE $_colUserName = '$userName'");
+            "UPDATE $_importantTableData SET $_colToken = '$userToken', $_colAbout = '$userAbout', $_colUserMail = '$userMail', $_colCategory = '$userCategory', $_colAccCreationDate = '$userAccCreationDate', $_colAccCreationTime = '$userAccCreationTime' WHERE $_colUserName = '$userName'");
 
         print('Update Result is: $updateResult');
       } else {
@@ -116,6 +118,7 @@ class LocalDatabase {
         _accountData[_colProfileImagePath] = profileImagePath;
         _accountData[_colProfileImageUrl] = profileImageUrl;
         _accountData[_colAbout] = userAbout;
+        _accountData[_colCategory] = userCategory;
         _accountData[_colWallpaper] = chatWallpaper;
         _accountData[_colMobileNumber] = '';
         _accountData[_colNotification] = "1";
@@ -176,6 +179,8 @@ class LocalDatabase {
         return this._colProfileImageUrl;
       case GetFieldForImportantDataLocalDatabase.About:
         return this._colAbout;
+      case GetFieldForImportantDataLocalDatabase.Category:
+        return this._colCategory;
       case GetFieldForImportantDataLocalDatabase.WallPaper:
         return this._colWallpaper;
       case GetFieldForImportantDataLocalDatabase.MobileNumber:
