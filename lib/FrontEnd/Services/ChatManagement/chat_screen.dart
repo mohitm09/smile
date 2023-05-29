@@ -140,49 +140,57 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _checkingForIncomingMessages(Map<String, dynamic>? docs) async {
     final Map<String, dynamic> _connectionsList =
-        docs![_firestoreFieldConstants.connections];
+    docs![_firestoreFieldConstants.connections];
 
     List<dynamic>? getIncomingMessages =
-        _connectionsList[this._connectionEmail];
+    _connectionsList[this._connectionEmail];
 
     if (getIncomingMessages != null) {
       await _cloudStoreDataManagement
           .removeOldMessages(connectionEmail: this._connectionEmail)
           .whenComplete(() {
-        getIncomingMessages.forEach((everyMessage) {
-          if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Text.toString()) {
-            Future.microtask(() {
-              _manageIncomingTextMessages(everyMessage.values.first);
-            });
-          } else if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Audio.toString()) {
-            Future.microtask(() {
-              _manageIncomingMediaMessages(
-                  everyMessage.values.first, ChatMessageTypes.Audio);
-            });
-          } else if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Image.toString()) {
-            Future.microtask(() {
-              _manageIncomingMediaMessages(
-                  everyMessage.values.first, ChatMessageTypes.Image);
-            });
-          } else if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Video.toString()) {
-            Future.microtask(() {
-              _manageIncomingMediaMessages(
-                  everyMessage.values.first, ChatMessageTypes.Video);
-            });
-          } else if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Location.toString()) {
-            Future.microtask(() {
-              _manageIncomingLocationMessages(everyMessage.values.first);
-            });
-          } else if (everyMessage.keys.first.toString() ==
-              ChatMessageTypes.Document.toString()) {
-            Future.microtask(() {
-              _manageIncomingMediaMessages(
-                  everyMessage.values.first, ChatMessageTypes.Document);
+        List<dynamic> reversedMessages = List.from(getIncomingMessages.reversed);
+
+        reversedMessages.forEach((everyMessage) {
+          final String messageType = everyMessage.keys.first.toString();
+          final dynamic messageData = everyMessage.values.first;
+
+          // Check if the message already exists in the list
+          bool messageExists = _allConversationMessages.any((message) =>
+          message.containsKey(messageData) &&
+              message[messageData] == messageType);
+
+          if (!messageExists) {
+            if (messageType == ChatMessageTypes.Text.toString()) {
+              Future.microtask(() {
+                _manageIncomingTextMessages(messageData);
+              });
+            } else if (messageType == ChatMessageTypes.Audio.toString()) {
+              Future.microtask(() {
+                _manageIncomingMediaMessages(messageData, ChatMessageTypes.Audio);
+              });
+            } else if (messageType == ChatMessageTypes.Image.toString()) {
+              Future.microtask(() {
+                _manageIncomingMediaMessages(messageData, ChatMessageTypes.Image);
+              });
+            } else if (messageType == ChatMessageTypes.Video.toString()) {
+              Future.microtask(() {
+                _manageIncomingMediaMessages(messageData, ChatMessageTypes.Video);
+              });
+            } else if (messageType == ChatMessageTypes.Location.toString()) {
+              Future.microtask(() {
+                _manageIncomingLocationMessages(messageData);
+              });
+            } else if (messageType == ChatMessageTypes.Document.toString()) {
+              Future.microtask(() {
+                _manageIncomingMediaMessages(
+                    messageData, ChatMessageTypes.Document);
+              });
+            }
+
+            // Add the message to the list after processing
+            _allConversationMessages.add({
+              messageData: messageType,
             });
           }
         });
@@ -191,6 +199,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print('Get Incoming Messages: $getIncomingMessages');
   }
+
+
 
   _manageIncomingLocationMessages(var locationMessage) async {
     await _localDatabase.insertMessageInUserTable(
@@ -345,25 +355,33 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _storeAndShowIncomingMessageData(
       {required String mediaFileLocalPath,
-      required ChatMessageTypes chatMessageTypes,
-      required var mediaMessage}) async {
+        required ChatMessageTypes chatMessageTypes,
+        required var mediaMessage}) async {
     try {
-      await _localDatabase.insertMessageInUserTable(
+      // Check if the message already exists in the list
+      bool messageExists = _allConversationMessages.any((message) =>
+      message.containsKey(mediaFileLocalPath) &&
+          message[mediaFileLocalPath] == mediaMessage.values.first.toString());
+
+      if (!messageExists) {
+        await _localDatabase.insertMessageInUserTable(
           userName: widget.userName,
           actualMessage: mediaFileLocalPath,
           chatMessageTypes: chatMessageTypes,
           messageHolderType: MessageHolderType.ConnectedUsers,
           messageDateLocal: DateTime.now().toString().split(" ")[0],
-          messageTimeLocal: mediaMessage.values.first.toString());
+          messageTimeLocal: mediaMessage.values.first.toString(),
+        );
 
-      if (mounted) {
-        setState(() {
-          this._allConversationMessages.add({
-            mediaFileLocalPath: mediaMessage.values.first.toString(),
+        if (mounted) {
+          setState(() {
+            this._allConversationMessages.add({
+              mediaFileLocalPath: mediaMessage.values.first.toString(),
+            });
+            this._chatMessageCategoryHolder.add(chatMessageTypes);
+            this._conversationMessageHolder.add(true);
           });
-          this._chatMessageCategoryHolder.add(chatMessageTypes);
-          this._conversationMessageHolder.add(true);
-        });
+        }
       }
     } catch (e) {
       print("Error in Store And Show Message: ${e.toString()}");
@@ -387,23 +405,30 @@ class _ChatScreenState extends State<ChatScreen> {
       // }
 
       List<PreviousMessageStructure> _storedPreviousMessages =
-          await _localDatabase.getAllPreviousMessages(widget.userName);
+      await _localDatabase.getAllPreviousMessages(widget.userName);
 
       for (int i = 0; i < _storedPreviousMessages.length; i++) {
         final PreviousMessageStructure _previousMessage =
-            _storedPreviousMessages[i];
+        _storedPreviousMessages[i];
 
-        if (mounted) {
-          setState(() {
-            this._allConversationMessages.add({
-              _previousMessage.actualMessage: _previousMessage.messageTime,
+        // Check if the message already exists in the list
+        bool messageExists = _allConversationMessages.any((message) =>
+        message.containsKey(_previousMessage.actualMessage) &&
+            message[_previousMessage.actualMessage] == _previousMessage.messageTime);
+
+        if (!messageExists) {
+          if (mounted) {
+            setState(() {
+              this._allConversationMessages.add({
+                _previousMessage.actualMessage: _previousMessage.messageTime,
+              });
+              this._chatMessageCategoryHolder.add(_previousMessage.messageType);
+              this._conversationMessageHolder.add(_previousMessage.messageHolder);
+
+              _positionToScroll += _amountToScroll(_previousMessage.messageType,
+                  actualMessageKey: _previousMessage.actualMessage);
             });
-            this._chatMessageCategoryHolder.add(_previousMessage.messageType);
-            this._conversationMessageHolder.add(_previousMessage.messageHolder);
-
-            _positionToScroll += _amountToScroll(_previousMessage.messageType,
-                actualMessageKey: _previousMessage.actualMessage);
-          });
+          }
         }
       }
     } catch (e) {
@@ -426,6 +451,7 @@ class _ChatScreenState extends State<ChatScreen> {
       await _fetchIncomingMessages();
     }
   }
+
 
   double _amountToScroll(ChatMessageTypes chatMessageTypes,
       {String? actualMessageKey}) {

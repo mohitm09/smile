@@ -421,10 +421,7 @@ class _ChatAndActivityScreenState extends State<ChatAndActivityScreen> {
 
                           /// For Extract latest Conversation Message
 //                          _latestDataForConnectionExtractPerfectly(_userName)
-                          Text(
-                            'Hello Sam',
-                            style: TextStyle(color: Colors.white70),
-                          ),
+
                         ],
                       ),
                     );
