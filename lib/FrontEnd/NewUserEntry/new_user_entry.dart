@@ -6,10 +6,7 @@ import 'package:smile/BackEnd/Firebase/OnlineDatabaseManagement/cloud_data_manag
 import 'package:smile/BackEnd/sqlite_management/local_databse_management.dart';
 import 'package:smile/FrontEnd/AuthUI/common_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:loading_overlay/loading_overlay.dart';
 import 'package:smile/FrontEnd/MainScreens/main_screen.dart';
-
-
 
 class TakePrimaryUserData extends StatefulWidget {
   const TakePrimaryUserData({Key? key}): super(key: key);
@@ -136,8 +133,8 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                       ),
                       SizedBox(height: 8.0),
                       RadioListTile(
-                        title: Text('No', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'No',
+                        title: Text('Yes', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'Yes',
                         groupValue: problems,
                         onChanged: (value) {
                           setState(() {
@@ -146,8 +143,8 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                         },
                       ),
                       RadioListTile(
-                        title: Text('Yes', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
-                        value: 'Yes',
+                        title: Text('No', style: TextStyle(fontSize: 18.0, color: Colors.white,)),
+                        value: 'No',
                         groupValue: problems,
                         onChanged: (value) {
                           setState(() {
@@ -280,25 +277,17 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
                 String category = '';
 
                 // Check the conditions to determine the category
-                if (rating == 'Excellent' &&
-                    problems == 'No' &&
-                    happiness == 'Few days ago' &&
-                    selfEsteem == 'Few days ago') {
+                if (rating == 'Okay' &&
+                    problems == 'No') {
                   category = 'Category One';
-                } else if (rating == 'Average' &&
-                    problems == 'Maybe' &&
-                    happiness == 'One week ago' &&
-                    selfEsteem == 'One week ago') {
+                } else if (rating == 'Okay' &&
+                    problems == 'Yes') {
                   category = 'Category Two';
-                } else if (rating == 'Average' &&
-                    problems == 'Yes' &&
-                    happiness == 'One week ago' &&
-                    selfEsteem == 'One week ago') {
+                } else if (rating == 'Not Okay' &&
+                    problems == 'No') {
                   category = 'Category Three';
-                } else if (rating == 'Below Average' &&
-                    problems == 'Yes' &&
-                    happiness == 'Few weeks ago' &&
-                    selfEsteem == 'Few weeks ago') {
+                } else if (rating == 'Not Okay' &&
+                    problems == 'Yes') {
                   category = 'Category Four';
                 }
 
